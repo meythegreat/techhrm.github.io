@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading TechHRM...</title>
+    <script>
+        (function() {
+            // 1. Define what counts as "Mobile"
+            // We check the User Agent (browser ID) AND screen width (less than 768px)
+            var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+            // 2. Redirect accordingly
+            if (isMobile) {
+                // Use .replace() so the "Back" button works correctly later
+                window.location.replace("mobile-login.html");
+            } else {
+                window.location.replace("login.html");
+            }
+        })();
+    </script>
+</head>
+<body style="background-color: #f4f4f4; font-family: sans-serif; text-align: center; padding-top: 50px;">
+    <p>Detecting your device...</p>
+    <noscript>
+        <p>JavaScript is disabled. Please select your version:</p>
+        <a href="login.html">Desktop Version</a> | <a href="mobile-login.html">Mobile Version</a>
+    </noscript>
+</body>
+</html>
