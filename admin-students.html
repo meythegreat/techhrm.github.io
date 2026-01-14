@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHRM Admin - Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-academic { font-family: 'Merriweather', serif; }
+        .font-sans-ui { font-family: 'Roboto', sans-serif; }
+        
+        .watermark-fixed {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60vh; height: 60vh;
+            background-image: url('assets/logo.png');
+            background-repeat: no-repeat; background-position: center; background-size: contain;
+            opacity: 0.08; z-index: 0; pointer-events: none;
+        }
+
+        .sidebar-bg { background-color: #1e3a8a; }
+        .sidebar-active { 
+            background-color: #facc15; 
+            color: #1e3a8a; 
+            font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-hover:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+        /* Animation for view switching */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
+
+    <div class="watermark-fixed"></div>
+
+    <aside class="w-72 sidebar-bg text-white flex flex-col shadow-2xl z-20 flex-shrink-0">
+        <div class="p-6 flex flex-col items-center border-b border-blue-800/50">
+            <img src="assets/logo.png" alt="FCU Logo" class="w-24 h-24 rounded-full shadow-lg mb-3 bg-white p-1">
+            <h1 class="font-serif-academic text-xl font-bold tracking-wide text-center">TechHRM</h1>
+            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">Administrator</p>
+        </div>
+
+        <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto">
+            <a href="admin-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-dashboard text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Dashboard</span>
+            </a>
+            
+            <a href="admin-students.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
+                <i class='bx bxs-group text-2xl mr-4'></i>
+                <span class="text-md">Students</span>
+            </a>
+
+            <a href="admin-payroll.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-wallet text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Payroll</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-blue-800/50">
+            <button onclick="if(confirm('Sign Out?')) location.href='index.html'" class="w-full flex items-center justify-center p-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition-colors shadow-lg">
+                <i class='bx bx-log-out text-2xl mr-2'></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative z-10 p-8">
+
+        <div id="masterlistView" class="fade-in">
+            <div class="bg-gradient-to-r from-[#526DFE] to-[#637bfb] rounded-2xl shadow-xl p-8 mb-8 text-white relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="relative z-10 flex items-center gap-4">
+                    <div class="bg-white/10 p-3 rounded-xl backdrop-blur-sm">
+                        <i class='bx bxs-user-detail text-4xl text-yellow-400'></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-black uppercase tracking-wide">Student Assistant Masterlist</h1>
+                        <p class="text-blue-100 text-sm">Active Enrolled Working Scholars</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 w-full md:w-auto relative z-10">
+                    <div class="relative flex-1 md:w-72">
+                        <i class='bx bx-search absolute left-3 top-3.5 text-gray-400 text-lg'></i>
+                        <input type="text" placeholder="Search Student..." class="w-full pl-10 pr-4 py-3 rounded-xl text-gray-700 focus:outline-none shadow-lg">
+                    </div>
+                    <div class="relative">
+                        <select class="appearance-none bg-blue-800/50 border border-blue-400 text-white py-3 pl-4 pr-10 rounded-xl font-bold hover:bg-blue-700 transition cursor-pointer shadow-lg backdrop-blur-sm">
+                            <option>Filter by...</option>
+                            <option>Department</option>
+                            <option>Supervisor</option>
+                        </select>
+                        <i class='bx bx-chevron-down absolute right-3 top-3.5 text-white pointer-events-none'></i>
+                    </div>
+                </div>
+
+                <div class="absolute right-0 top-0 opacity-10 transform translate-x-10 -translate-y-10">
+                    <i class='bx bxs-contact text-[10rem]'></i>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider">Name</th>
+                                <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider">Student ID</th>
+                                <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider">Department</th>
+                                <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider">Immediate Supervisor</th>
+                                <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-sm">
+                            <tr class="hover:bg-blue-50/40 transition-colors">
+                                <td class="py-4 px-6 font-bold text-gray-800">Yvan Dale Lastimoso</td>
+                                <td class="py-4 px-6 text-gray-500">23-CCS1-0001</td>
+                                <td class="py-4 px-6"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
+                                <td class="py-4 px-6 text-gray-700">Mrs. Jonah P. Gafate</td>
+                                <td class="py-4 px-6 text-center">
+                                    <button onclick="switchView('profile')" class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-blue-50/40 transition-colors">
+                                <td class="py-4 px-6 font-bold text-gray-800">Miguel Angelo Barroa Basinillo</td>
+                                <td class="py-4 px-6 text-gray-500">23-CCS1-0048</td>
+                                <td class="py-4 px-6"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
+                                <td class="py-4 px-6 text-gray-700">Mrs. Jonah P. Gafate</td>
+                                <td class="py-4 px-6 text-center">
+                                    <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-blue-50/40 transition-colors">
+                                <td class="py-4 px-6 font-bold text-gray-800">Ian Miguel Dumangon</td>
+                                <td class="py-4 px-6 text-gray-500">23-CCS1-0048</td>
+                                <td class="py-4 px-6"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
+                                <td class="py-4 px-6 text-gray-700">Mrs. Jonah P. Gafate</td>
+                                <td class="py-4 px-6 text-center">
+                                    <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-between items-center">
+                    <span class="text-xs text-gray-500 font-bold uppercase tracking-wide">Showing 1-10 of 50</span>
+                    <div class="flex gap-2">
+                        <button class="w-8 h-8 flex items-center justify-center rounded border bg-white hover:bg-gray-100"><i class='bx bx-chevron-left'></i></button>
+                        <button class="w-8 h-8 flex items-center justify-center rounded bg-blue-600 text-white font-bold">1</button>
+                        <button class="w-8 h-8 flex items-center justify-center rounded border bg-white hover:bg-gray-100">2</button>
+                        <button class="w-8 h-8 flex items-center justify-center rounded border bg-white hover:bg-gray-100"><i class='bx bx-chevron-right'></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="profileView" class="hidden fade-in">
+            <div class="mb-6">
+                <button onclick="switchView('masterlist')" class="flex items-center gap-2 text-gray-500 hover:text-blue-600 font-bold transition-colors group">
+                    <div class="bg-white p-2 rounded-full shadow-sm group-hover:shadow-md transition-all"><i class='bx bx-arrow-back text-xl'></i></div>
+                    <span>Back to Masterlist</span>
+                </button>
+            </div>
+
+            <div class="bg-[#526DFE] rounded-t-2xl shadow-xl p-8 relative mt-16 min-h-[220px]">
+                <div class="absolute -top-12 left-8 sm:left-12">
+                    <div class="w-32 h-32 rounded-full bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center overflow-hidden">
+                        <i class='bx bxs-user text-6xl text-gray-400'></i>
+                    </div>
+                </div>
+
+                <div class="ml-0 sm:ml-44 mt-16 sm:mt-0 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-white">
+                    <div>
+                        <h1 class="text-3xl font-bold underline decoration-white/30 underline-offset-8">Yvan Dale Lastimoso</h1>
+                        <div class="mt-4 space-y-2 text-blue-100 font-medium text-sm">
+                            <p class="flex items-center gap-2"><span class="font-bold text-white w-24">Course:</span> BSIT</p>
+                            <p class="flex items-center gap-2"><span class="font-bold text-white w-24">Year Level:</span> 3</p>
+                            <p class="flex items-center gap-2"><span class="font-bold text-white w-24">Job Position:</span> Clerical & Janitorial</p>
+                        </div>
+                    </div>
+                    <button onclick="location.href='admin-student-assessment.html'" class="bg-white text-blue-600 font-bold py-2.5 px-6 rounded-lg shadow-lg hover:bg-blue-50 transition-colors flex items-center gap-2">
+                        <span>Assessment Record</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-b-2xl shadow-xl p-8 border-x border-b border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-12">
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bx-male-female text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Gender</p>
+                            <p class="font-bold text-gray-800 text-lg mt-1">MALE</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bxs-phone text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Contact Number</p>
+                            <p class="font-bold text-gray-800 text-lg mt-1">+63966123456</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bxs-map text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Home Address</p>
+                            <p class="font-bold text-gray-800 mt-1 uppercase leading-snug">BRGY. LAWAAN SITIO PATAG ROXAS CITY, CAPIZ 5800</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bx-calendar text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Date of Birth</p>
+                            <p class="font-bold text-gray-800 text-lg mt-1">November 13, 2004</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bxs-envelope text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Email Address</p>
+                            <p class="font-bold text-gray-800 mt-1">yvandale@gmail.com</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bxs-id-card text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Enrollment Status</p>
+                            <p class="font-bold text-gray-800 text-lg mt-1 uppercase">ENROLLED</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bxs-building-house text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Assigned Department</p>
+                            <p class="font-bold text-gray-800 text-lg mt-1">LIBRARY</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 lg:col-span-2">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bxs-first-aid text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Emergency Contact</p>
+                            <p class="font-bold text-gray-800 text-lg mt-1">MS. MARIA MERCEDES</p>
+                            <p class="text-gray-500 text-sm mt-1 flex items-center gap-1"><i class='bx bxs-phone'></i> +630926123456</p>
+                            <p class="text-gray-500 text-xs mt-1 uppercase">BRGY. LAWAAN SITIO PATAG ROXAS CITY, CAPIZ 5800</p>
+                        </div>
+                    </div>
+
+                     <div class="flex items-start gap-4">
+                        <div class="bg-gray-100 p-3 rounded-xl text-gray-700"><i class='bx bxs-graduation text-2xl'></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Scholarship</p>
+                            <p class="font-bold text-gray-800 mt-1 uppercase">ACADEMIC SCHOLARSHIP (50%)</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function switchView(viewName) {
+            const masterlist = document.getElementById('masterlistView');
+            const profile = document.getElementById('profileView');
+
+            if (viewName === 'profile') {
+                masterlist.classList.add('hidden');
+                profile.classList.remove('hidden');
+                // Optional: Scroll to top when switching
+                document.querySelector('main').scrollTop = 0;
+            } else {
+                profile.classList.add('hidden');
+                masterlist.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHRM - Penalty Logger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-academic { font-family: 'Merriweather', serif; }
+        .font-sans-ui { font-family: 'Roboto', sans-serif; }
+        
+        .watermark-fixed {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60vh; height: 60vh;
+            background-image: url('assets/logo.png');
+            background-repeat: no-repeat; background-position: center; background-size: contain;
+            opacity: 0.08; z-index: 0; pointer-events: none;
+        }
+
+        .sidebar-bg { background-color: #1e3a8a; }
+        .sidebar-active { 
+            background-color: #facc15; 
+            color: #1e3a8a; 
+            font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-hover:hover { background-color: rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
+
+    <div class="watermark-fixed"></div>
+
+    <aside class="w-72 sidebar-bg text-white flex flex-col shadow-2xl z-20 flex-shrink-0">
+        <div class="p-6 flex flex-col items-center border-b border-blue-800/50">
+            <img src="assets/logo.png" alt="FCU Logo" class="w-24 h-24 rounded-full shadow-lg mb-3 bg-white p-1">
+            <h1 class="font-serif-academic text-xl font-bold tracking-wide text-center">TechHRM</h1>
+            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">Supervisor Portal</p>
+        </div>
+
+        <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto">
+            <a href="supervisor-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-dashboard text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Dashboard</span>
+            </a>
+            <a href="supervisor-students.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-group text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Students</span>
+            </a>
+            <a href="supervisor-hiring-status.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-user-badge text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Hiring Status</span>
+            </a>
+            <a href="supervisor-attendance-monitor.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-time-five text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Attendance Monitor</span>
+            </a>
+
+            <a href="supervisor-penalty-logger.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
+                <i class='bx bxs-error-circle text-2xl mr-4'></i>
+                <span class="text-md">Penalty Logger</span>
+            </a>
+
+            <a href="supervisor-payroll.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-wallet text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Payroll</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-blue-800/50">
+            <button onclick="if(confirm('Sign Out?')) location.href='index.html'" class="w-full flex items-center justify-center p-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition-colors shadow-lg">
+                <i class='bx bx-log-out text-2xl mr-2'></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative z-10 p-8">
+        
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-4">
+                <div class="bg-red-100 p-3 rounded-xl">
+                    <i class='bx bxs-no-entry text-4xl text-red-600'></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-black text-gray-800 uppercase tracking-wide">Penalty & Violation Logger</h1>
+                    <p class="text-gray-500 text-sm">Record and track disciplinary actions</p>
+                </div>
+            </div>
+            <div class="bg-white px-6 py-2 rounded-lg shadow-sm border border-gray-200">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Logged Today</span>
+                <p class="text-2xl font-black text-gray-800">0</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 mb-8 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-2 h-full bg-red-500"></div>
+            
+            <h2 class="text-lg font-bold text-blue-900 border-b border-gray-100 pb-2 mb-6 flex items-center gap-2">
+                <i class='bx bx-edit'></i> Record New Violation
+            </h2>
+
+            <form class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Student Name</label>
+                        <div class="relative">
+                            <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none">
+                                <option>Select Student...</option>
+                                <option>Miguel Angelo Barroa Basinillo</option>
+                                <option>Yvan Dale Lastimoso</option>
+                                <option>Ian Miguel Dumangon</option>
+                            </select>
+                            <i class='bx bx-chevron-down absolute right-4 top-4 text-gray-500 pointer-events-none'></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Violation Type</label>
+                        <div class="relative">
+                            <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none">
+                                <option>Select Type...</option>
+                                <option>Tardiness</option>
+                                <option>Absent without Notice</option>
+                                <option>Unprofessional Behavior</option>
+                                <option>Incomplete Uniform</option>
+                            </select>
+                            <i class='bx bx-chevron-down absolute right-4 top-4 text-gray-500 pointer-events-none'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Penalty (Hours Deduction)</label>
+                        <div class="relative">
+                            <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-red-500 appearance-none">
+                                <option>- 1 hr</option>
+                                <option>- 2 hrs</option>
+                                <option>- 4 hrs</option>
+                                <option>- 8 hrs (Suspension)</option>
+                            </select>
+                            <i class='bx bx-chevron-down absolute right-4 top-4 text-gray-500 pointer-events-none'></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Description / Notes</label>
+                        <input type="text" placeholder="Add brief details..." class="w-full bg-gray-50 border-b-2 border-gray-300 text-gray-700 py-3 px-2 focus:outline-none focus:border-red-500 transition-colors">
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end mt-4">
+                    <button type="button" class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-3 px-8 rounded-full shadow-sm hover:shadow-md transition-all flex items-center gap-2 transform active:scale-95">
+                        <i class='bx bx-check-circle text-xl'></i> Submit Penalty
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 bg-gray-50">
+                <h3 class="font-bold text-gray-700 text-lg">Violation History</h3>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-white border-b border-gray-100">
+                        <tr>
+                            <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider">Date</th>
+                            <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider">Student</th>
+                            <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider text-center">Violation</th>
+                            <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider text-center">Penalty</th>
+                            <th class="py-5 px-6 font-bold text-gray-600 uppercase text-xs tracking-wider text-right">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50 text-sm">
+                        
+                        <tr class="hover:bg-red-50/30 transition-colors">
+                            <td class="py-5 px-6 font-bold text-gray-500">Feb 02</td>
+                            <td class="py-5 px-6 font-bold text-gray-800">Miguel Angelo Barroa Basinillo</td>
+                            <td class="py-5 px-6 text-center font-medium text-gray-600">Tardiness</td>
+                            <td class="py-5 px-6 text-center font-bold text-red-600">- 1 hr</td>
+                            <td class="py-5 px-6 text-right font-bold text-gray-800">Recorded</td>
+                        </tr>
+
+                        <tr class="hover:bg-red-50/30 transition-colors">
+                            <td class="py-5 px-6 font-bold text-gray-500">Feb 05</td>
+                            <td class="py-5 px-6 font-bold text-gray-800">Yvan Dale Lastimoso</td>
+                            <td class="py-5 px-6 text-center font-medium text-gray-600">Absent</td>
+                            <td class="py-5 px-6 text-center font-bold text-red-600">- 4 hrs</td>
+                            <td class="py-5 px-6 text-right font-bold text-gray-800">Recorded</td>
+                        </tr>
+
+                        <tr class="hover:bg-red-50/30 transition-colors">
+                            <td class="py-5 px-6 font-bold text-gray-500">Feb 8</td>
+                            <td class="py-5 px-6 font-bold text-gray-800">Ian Miguel Dumangon</td>
+                            <td class="py-5 px-6 text-center font-medium text-gray-600">Unprofessional Behavior</td>
+                            <td class="py-5 px-6 text-center font-bold text-red-600">- 1 hr</td>
+                            <td class="py-5 px-6 text-right font-bold text-gray-800">Recorded</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>
