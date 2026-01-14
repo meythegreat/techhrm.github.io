@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        // Check if screen width is less than or equal to 768px (Mobile/Tablet size)
+        if (window.innerWidth <= 768) {
+            window.location.href = "mobile-login.html";
+        }
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHRM Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:ital,wght@0,400;0,500;0,700;1,500&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-academic { font-family: 'Merriweather', serif; }
+        .font-sans-ui { font-family: 'Roboto', sans-serif; }
+        
+        /* UPDATED: Pointing to local assets folder */
+        .watermark-bg {
+            background-image: url('assets/watermark.jpg'); 
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 50%;
+            opacity: 0.05; 
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen flex items-center justify-center relative overflow-hidden font-sans-ui text-gray-800">
+
+    <div class="absolute inset-0 watermark-bg"></div>
+
+    <div class="relative z-10 w-full max-w-md p-6 flex flex-col items-center">
+        
+        <div class="mb-6">
+            <img src="assets/logo.jpg" alt="University Seal" class="w-32 h-32 rounded-full object-cover mx-auto shadow-sm">
+        </div>
+
+        <div class="text-center mb-10">
+            <h2 class="font-serif-academic text-gray-700 text-lg uppercase tracking-wide font-bold">Filamer Christian University, Inc.</h2>
+            <h1 class="font-serif-academic text-gray-800 text-5xl font-black mt-2 tracking-tight">TechHRM</h1>
+        </div>
+
+        <form id="loginForm" class="w-full space-y-6">
+            
+            <div class="flex flex-col">
+                <label for="username" class="mb-1 font-bold italic text-black text-sm">Username / ID</label>
+                <input type="text" id="username" placeholder="Enter your username..." class="w-full px-4 py-3 border-2 border-gray-300 rounded-sm focus:outline-none focus:border-blue-500 placeholder-gray-400 bg-white">
+            </div>
+
+            <div class="flex flex-col">
+                <label for="password" class="mb-1 font-bold italic text-black text-sm">Password</label>
+                <input type="password" id="password" placeholder="Enter your password..." class="w-full px-4 py-3 border-2 border-gray-300 rounded-sm focus:outline-none focus:border-blue-500 placeholder-gray-400 bg-white">
+            </div>
+
+            <div class="flex flex-col relative">
+                <label for="role" class="mb-1 font-bold italic text-black text-sm">Select Role</label>
+                <div class="relative">
+                    <select id="role" class="w-full px-4 py-3 border-2 border-gray-300 rounded-sm appearance-none focus:outline-none focus:border-blue-500 text-gray-700 bg-white cursor-pointer">
+                        <option value="" disabled selected>Enter your role...</option>
+                        <option value="admin">Admin</option>
+                        <option value="supervisor">Supervisor</option>
+                        <option value="student">Student</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                        <svg class="fill-current h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-[#526DFE] hover:bg-[#4059e3] text-white font-bold py-3 px-4 rounded-full shadow-lg transition duration-200 ease-in-out transform active:scale-95">
+                    Sign In
+                </button>
+            </div>
+
+            <div class="text-center">
+                <a href="#" class="text-gray-500 text-sm font-bold underline hover:text-blue-600">Forgot Password?</a>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            // Prevent the page from reloading
+            event.preventDefault();
+
+            // Get the value of the role dropdown
+            const role = document.getElementById('role').value;
+            const username = document.getElementById('username').value;
+
+            // Simple validation
+            if (!username) {
+                alert("Please enter a username.");
+                return;
+            }
+
+            if (role === "") {
+                alert("Please select a role before signing in.");
+                return;
+            }
+
+            // Logic handling (Simulating redirection)
+            // In a real Laravel/Django app, the backend handles this. 
+            // Since this is an HTML prototype, we use alerts to show it works.
+            
+            if (role === 'admin') {
+                alert(`Welcome, Admin ${username}! Redirecting to Admin Dashboard...`);
+                window.location.href = 'admin-dashboard.html'; // Uncomment when you have this page
+            } else if (role === 'supervisor') {
+                alert(`Welcome Supervisor ${username}. Redirecting to Monitoring Panel...`);
+                window.location.href = 'supervisor-dashboard.html'; 
+            } else if (role === 'student') {
+                alert(`Hello Student ${username}. Redirecting to Student Portal...`);
+                window.location.href = 'student-dashboard.html'; 
+            }
+        });
+    </script>
+</body>
+</html>

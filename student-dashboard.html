@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHRM - Student Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-academic { font-family: 'Merriweather', serif; }
+        .font-sans-ui { font-family: 'Roboto', sans-serif; }
+        
+        /* LOGO WATERMARK BACKGROUND */
+        .watermark-fixed {
+            position: fixed;
+            top: 50%;
+            left: 50%; /* Center relative to the viewport, ignoring sidebar */
+            transform: translate(-50%, -50%);
+            width: 60vh; /* Large size */
+            height: 60vh;
+            background-image: url('assets/logo.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.08; /* Subtle watermark */
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Sidebar Colors based on Logo */
+        .sidebar-bg { background-color: #1e3a8a; } /* Deep Blue */
+        .sidebar-active { 
+            background-color: #facc15; /* Yellow */
+            color: #1e3a8a; /* Blue Text */
+            font-weight: bold;
+        }
+        .sidebar-hover:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
+
+    <div class="watermark-fixed"></div>
+
+    <aside class="w-72 sidebar-bg text-white flex flex-col shadow-2xl z-20 flex-shrink-0">
+        <div class="p-6 flex flex-col items-center border-b border-blue-800/50">
+            <img src="assets/logo.jpg" alt="FCU Logo" class="w-24 h-24 rounded-full shadow-lg mb-3 bg-white p-1">
+            <h1 class="font-serif-academic text-xl font-bold tracking-wide text-center">TechHRM</h1>
+            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">Student Portal</p>
+        </div>
+
+        <nav class="flex-1 py-6 px-3 space-y-3 overflow-y-auto">
+            
+            <a href="student-dashboard.html" class="flex items-center p-4 rounded-xl sidebar-active transition-all shadow-md group">
+                <i class='bx bxs-dashboard text-3xl mr-4'></i>
+                <span class="text-lg">Dashboard</span>
+            </a>
+
+            <a href="attendance.html" class="flex items-center p-4 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-time-five text-3xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-lg">Attendance</span>
+            </a>
+
+            <a href="schedule.html" class="flex items-center p-4 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-calendar text-3xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-lg">Schedule</span>
+            </a>
+
+            <a href="worklog.html" class="flex items-center p-4 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-spreadsheet text-3xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-lg">Work Log</span>
+            </a>
+
+        </nav>
+
+        <div class="p-4 border-t border-blue-800/50">
+            <button id="signOutBtn" class="w-full flex items-center justify-center p-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition-colors shadow-lg">
+                <i class='bx bx-log-out text-2xl mr-2'></i>
+                Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative z-10">
+        
+        <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-12 shadow-md">
+            <p class="text-sm font-medium tracking-widest uppercase mb-2 text-yellow-400">Welcome Back!</p>
+            <h1 class="font-bold text-4xl md:text-5xl tracking-wide uppercase">Yvan Dale Ocbena Lastimoso</h1>
+        </header>
+
+        <div class="max-w-7xl mx-auto w-full px-8 py-10 grid grid-cols-1 xl:grid-cols-2 gap-8">
+            
+            <section class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-1">
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-2xl font-bold text-blue-900 flex items-center">
+                        <i class='bx bxs-id-card mr-3 text-yellow-500'></i> Student Information
+                    </h2>
+                </div>
+                <div class="p-6 space-y-6">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-gray-500 font-medium">SY / Sem</div>
+                        <div class="col-span-2 font-bold text-gray-800 text-lg">2025 - 2026</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-gray-500 font-medium">Course</div>
+                        <div class="col-span-2 font-bold text-gray-800 text-lg">BSIT</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-gray-500 font-medium">Year Level</div>
+                        <div class="col-span-2 font-bold text-gray-800 text-lg">3</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-gray-500 font-medium">Status</div>
+                        <div class="col-span-2 inline-block">
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold uppercase">Continuing</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-gray-500 font-medium">Address</div>
+                        <div class="col-span-2 font-bold text-gray-800 uppercase leading-snug">
+                            Brgy. Lawa-an, Sitio Patag, Roxas City Capiz
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-1 h-full">
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-2xl font-bold text-blue-900 flex items-center">
+                        <i class='bx bxs-graduation mr-3 text-yellow-500'></i> Academic Details
+                    </h2>
+                </div>
+                <div class="p-8 space-y-8">
+                    <div>
+                        <p class="text-gray-500 text-sm font-bold uppercase tracking-wider mb-1">Category</p>
+                        <p class="text-3xl font-black text-gray-800">HIGHER EDUCATION</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-8">
+                         <div>
+                            <p class="text-gray-500 text-sm font-bold uppercase tracking-wider mb-1">School Year</p>
+                            <p class="text-2xl font-bold text-blue-900">2025 - 2026</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm font-bold uppercase tracking-wider mb-1">Semester</p>
+                            <p class="text-2xl font-bold text-blue-900">1st Semester</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('signOutBtn').addEventListener('click', function(e) {
+            if(confirm("Are you sure you want to sign out?")) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

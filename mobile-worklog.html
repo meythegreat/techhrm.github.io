@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mobile Work Log</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style> .watermark-fixed { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80vw; height: 80vw; background-image: url('assets/logo.jpg'); opacity: 0.05; z-index: -1; pointer-events: none; background-size: contain; background-repeat: no-repeat; } </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans pb-20 overflow-x-hidden">
+    <div class="watermark-fixed"></div>
+    <header class="fixed top-0 w-full bg-[#1e3a8a] text-white shadow-md z-30">
+        <div class="flex justify-between items-center p-4">
+            <div class="flex items-center gap-2"><img src="assets/logo.jpg" class="w-10 h-10 rounded-full bg-white p-0.5"><h1 class="font-bold text-lg">TechHRM</h1></div>
+            <button id="menuBtn" class="text-3xl focus:outline-none"><i class='bx bx-menu'></i></button>
+        </div>
+    </header>
+    <div class="h-20"></div>
+
+    <main class="px-4">
+        <h2 class="text-2xl font-bold text-blue-900 mb-4 pl-3 border-l-4 border-yellow-400">Work History</h2>
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+            <div class="bg-gray-50 p-3 border-b text-xs text-gray-500 uppercase font-bold tracking-wider"><i class='bx bx-right-arrow-alt'></i> Swipe to view details</div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left whitespace-nowrap"><thead class="bg-blue-50 text-blue-900"><tr><th class="px-4 py-3">Date</th><th class="px-4 py-3 text-center">Hrs</th><th class="px-4 py-3">Task</th></tr></thead><tbody class="divide-y divide-gray-100"><tr><td class="px-4 py-3 font-bold text-gray-700">Jan 16</td><td class="px-4 py-3 text-center font-bold text-blue-600">4</td><td class="px-4 py-3 text-gray-500">Answering Calls...</td></tr></tbody></table>
+            </div>
+        </div>
+    </main>
+
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity duration-300 opacity-0"></div>
+    <aside id="mobileSidebar" class="fixed inset-y-0 right-0 w-[65%] bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col font-sans">
+        <div class="h-32 bg-gradient-to-b from-[#526DFE] to-[#1e3a8a] relative"><div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2"><div class="w-24 h-24 bg-gray-200 rounded-full border-4 border-white shadow-lg overflow-hidden flex items-center justify-center"><i class='bx bxs-user text-5xl text-gray-400'></i></div></div></div>
+        <div class="mt-14 text-center px-4"><h3 class="font-black text-gray-800 uppercase leading-tight text-lg mb-1">Yvan Dale Ocbena Lastimoso</h3><button onclick="if(confirm('Sign out?')) location.href='mobile-login.html'" class="text-gray-400 text-sm hover:text-red-500 underline">Sign Out</button></div>
+        <nav class="flex-1 px-6 py-8 space-y-6">
+            <a href="mobile-dashboard.html" class="flex items-center text-lg font-medium text-gray-600 hover:text-blue-600 px-4 py-2 rounded-xl transition-colors">Dashboard</a>
+            <a href="mobile-attendance.html" class="flex items-center text-lg font-medium text-gray-600 hover:text-blue-600 px-4 py-2 rounded-xl transition-colors">Attendance</a>
+            <a href="mobile-schedule.html" class="flex items-center text-lg font-medium text-gray-600 hover:text-blue-600 px-4 py-2 rounded-xl transition-colors">Schedule</a>
+            <a href="mobile-worklog.html" class="flex items-center text-lg font-bold text-gray-800 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.1)] px-4 py-3 rounded-xl border-l-4 border-blue-600">Work Log</a>
+        </nav>
+    </aside>
+    <script>
+        const menuBtn = document.getElementById('menuBtn'), sidebar = document.getElementById('mobileSidebar'), backdrop = document.getElementById('sidebarBackdrop');
+        menuBtn.addEventListener('click', () => { backdrop.classList.remove('hidden'); setTimeout(() => backdrop.classList.remove('opacity-0'), 10); sidebar.classList.remove('translate-x-full'); });
+        backdrop.addEventListener('click', () => { backdrop.classList.add('opacity-0'); sidebar.classList.add('translate-x-full'); setTimeout(() => backdrop.classList.add('hidden'), 300); });
+    </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHRM - Schedule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-academic { font-family: 'Merriweather', serif; }
+        .font-sans-ui { font-family: 'Roboto', sans-serif; }
+        
+        .watermark-fixed {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60vh; height: 60vh;
+            background-image: url('assets/logo.jpg');
+            background-repeat: no-repeat; background-position: center; background-size: contain;
+            opacity: 0.08; z-index: 0; pointer-events: none;
+        }
+
+        .sidebar-bg { background-color: #1e3a8a; }
+        .sidebar-active { background-color: #facc15; color: #1e3a8a; font-weight: bold; }
+        .sidebar-hover:hover { background-color: rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
+    
+    <div class="watermark-fixed"></div>
+
+    <aside class="w-72 sidebar-bg text-white flex flex-col shadow-2xl z-20 flex-shrink-0">
+        <div class="p-6 flex flex-col items-center border-b border-blue-800/50">
+            <img src="assets/logo.jpg" alt="FCU Logo" class="w-24 h-24 rounded-full shadow-lg mb-3 bg-white p-1">
+            <h1 class="font-serif-academic text-xl font-bold tracking-wide text-center">TechHRM</h1>
+        </div>
+        <nav class="flex-1 py-6 px-3 space-y-3">
+            <a href="student-dashboard.html" class="flex items-center p-4 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-dashboard text-3xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-lg">Dashboard</span>
+            </a>
+            <a href="attendance.html" class="flex items-center p-4 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-time-five text-3xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-lg">Attendance</span>
+            </a>
+            <a href="schedule.html" class="flex items-center p-4 rounded-xl sidebar-active transition-all shadow-md group">
+                <i class='bx bxs-calendar text-3xl mr-4'></i>
+                <span class="text-lg">Schedule</span>
+            </a>
+            <a href="worklog.html" class="flex items-center p-4 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-spreadsheet text-3xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-lg">Work Log</span>
+            </a>
+        </nav>
+        <div class="p-4 border-t border-blue-800/50">
+            <button onclick="location.href='login.html'" class="w-full flex items-center justify-center p-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition-colors shadow-lg">
+                <i class='bx bx-log-out text-2xl mr-2'></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative z-10 p-8">
+        <h1 class="text-4xl font-bold text-blue-900 mb-8 pl-4 border-l-8 border-yellow-400">Class Schedule</h1>
+        
+        <div class="bg-white/95 backdrop-blur-sm shadow-lg rounded-2xl mb-8 overflow-hidden border border-gray-200">
+            <div class="bg-blue-900 py-3 px-6">
+                <h2 class="text-xl font-bold text-white uppercase tracking-wide">Today's Schedule</h2>
+            </div>
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
+                    <div class="space-y-4">
+                        <div class="flex items-center"><span class="w-32 text-gray-400 text-lg uppercase font-bold text-xs tracking-wider">Day</span><span id="todayDay" class="text-blue-900 font-bold text-2xl">Loading...</span></div>
+                        <div class="flex items-center"><span class="w-32 text-gray-400 text-lg uppercase font-bold text-xs tracking-wider">Time</span><span id="todayTime" class="text-gray-800 font-medium text-xl">--:--</span></div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center"><span class="w-32 text-gray-400 text-lg uppercase font-bold text-xs tracking-wider">Department</span><span id="todayDept" class="text-gray-800 font-medium text-xl">-----</span></div>
+                        <div class="flex items-center"><span class="w-32 text-gray-400 text-lg uppercase font-bold text-xs tracking-wider">Supervisor</span><span id="todaySuper" class="text-gray-800 font-medium text-xl">-----</span></div>
+                    </div>
+                </div>
+                <div id="noScheduleMsg" class="hidden text-center text-gray-400 italic mt-6 text-lg bg-gray-50 p-4 rounded-lg">No duty scheduled for today. Enjoy your day!</div>
+            </div>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-sm shadow-lg rounded-2xl overflow-hidden border border-gray-200">
+            <div class="bg-gray-50 border-b border-gray-200 py-4 px-6">
+                <h2 class="text-xl font-bold text-gray-700">Weekly View</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-blue-50 text-blue-900">
+                        <tr>
+                            <th class="py-4 px-6 font-bold">Day</th>
+                            <th class="py-4 px-6 font-bold">Time</th>
+                            <th class="py-4 px-6 font-bold">Duty Type</th>
+                            <th class="py-4 px-6 font-bold">Department</th>
+                            <th class="py-4 px-6 font-bold">Supervisor</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="hover:bg-yellow-50"><td class="py-4 px-6 font-bold">Monday</td><td class="py-4 px-6">8:00 AM - 12:00 PM</td><td class="py-4 px-6">Clerical</td><td class="py-4 px-6">JHS Office</td><td class="py-4 px-6">Mrs. Fatima G. Palmes</td></tr>
+                        <tr class="hover:bg-yellow-50"><td class="py-4 px-6 font-bold">Tuesday</td><td class="py-4 px-6">1:00 PM - 5:00 PM</td><td class="py-4 px-6">Janitorial</td><td class="py-4 px-6">Library</td><td class="py-4 px-6">Mrs. Ruth Fantilaga</td></tr>
+                        <tr class="hover:bg-yellow-50"><td class="py-4 px-6 font-bold">Wednesday</td><td class="py-4 px-6">8:00 AM - 12:00 PM</td><td class="py-4 px-6">Clerical</td><td class="py-4 px-6">JHS Office</td><td class="py-4 px-6">Mrs. Fatima G. Palmes</td></tr>
+                        <tr class="hover:bg-yellow-50"><td class="py-4 px-6 font-bold">Thursday</td><td class="py-4 px-6">1:00 PM - 5:00 PM</td><td class="py-4 px-6">Janitorial</td><td class="py-4 px-6">Library</td><td class="py-4 px-6">Mrs. Ruth Fantilaga</td></tr>
+                        <tr class="hover:bg-yellow-50"><td class="py-4 px-6 font-bold">Friday</td><td class="py-4 px-6">8:00 AM - 12:00 PM</td><td class="py-4 px-6">Clerical</td><td class="py-4 px-6">JHS Office</td><td class="py-4 px-6">Mrs. Fatima G. Palmes</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const weeklySchedule = {
+            'Monday': { time: '8:00 AM - 12:00 PM', dept: 'JHS Office', super: 'Mrs. Fatima G. Palmes' },
+            'Tuesday': { time: '1:00 PM - 5:00 PM', dept: 'Library', super: 'Mrs. Ruth Fantilaga' },
+            'Wednesday': { time: '8:00 AM - 12:00 PM', dept: 'JHS Office', super: 'Mrs. Fatima G. Palmes' },
+            'Thursday': { time: '1:00 PM - 5:00 PM', dept: 'Library', super: 'Mrs. Ruth Fantilaga' },
+            'Friday': { time: '8:00 AM - 12:00 PM', dept: 'JHS Office', super: 'Mrs. Fatima G. Palmes' }
+        };
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const currentDayName = days[new Date().getDay()];
+        
+        document.getElementById('todayDay').innerText = currentDayName;
+        if (weeklySchedule[currentDayName]) {
+            const data = weeklySchedule[currentDayName];
+            document.getElementById('todayTime').innerText = data.time;
+            document.getElementById('todayDept').innerText = data.dept;
+            document.getElementById('todaySuper').innerText = data.super;
+        } else {
+            document.getElementById('noScheduleMsg').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
