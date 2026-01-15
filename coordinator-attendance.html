@@ -20,6 +20,7 @@
             opacity: 0.08; z-index: 0; pointer-events: none;
         }
 
+        /* Coordinator Theme */
         .sidebar-bg { background-color: #1e3a8a; }
         .sidebar-active { 
             background-color: #facc15; 
@@ -38,22 +39,35 @@
         <div class="p-6 flex flex-col items-center border-b border-blue-800/50">
             <img src="assets/logo.png" alt="FCU Logo" class="w-24 h-24 rounded-full shadow-lg mb-3 bg-white p-1">
             <h1 class="font-serif-academic text-xl font-bold tracking-wide text-center">TechHRM</h1>
-            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">Supervisor Portal</p>
+            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">WSPO Coordinator</p>
         </div>
 
         <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto">
-            <a href="supervisor-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+            <a href="coordinator-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-dashboard text-2xl mr-4 group-hover:text-yellow-400'></i>
                 <span class="text-md font-medium">Dashboard</span>
             </a>
-            <a href="supervisor-students.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+            <a href="coordinator-students.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-group text-2xl mr-4 group-hover:text-yellow-400'></i>
-                <span class="text-md font-medium">Students</span>
+                <span class="text-md font-medium">Students Masterlist</span>
+            </a>
+            <a href="coordinator-hiring-status.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-user-badge text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Hiring Status</span>
             </a>
             
-            <a href="supervisor-attendance-monitor.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
+            <a href="coordinator-attendance.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
                 <i class='bx bxs-time-five text-2xl mr-4'></i>
                 <span class="text-md">Attendance Monitor</span>
+            </a>
+
+            <a href="coordinator-penalty-logger.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-error-circle text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Penalty Logger</span>
+            </a>
+            <a href="coordinator-payroll.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-wallet text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Payroll</span>
             </a>
         </nav>
 
@@ -71,40 +85,40 @@
                 
                 <div class="flex-1 w-full">
                     <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i class='bx bx-filter-alt'></i> Filters / Search
+                        <i class='bx bx-filter-alt'></i> Global Filters / Search
                     </h3>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="relative">
-                            <label class="block text-xs font-bold text-gray-400 mb-1 ml-1">Department</label>
-                            <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
-                                <option>CCS</option>
-                                <option>JHS Office</option>
-                                <option>Library</option>
+                            <label class="block text-xs font-bold text-gray-400 mb-1 ml-1">Select Department</label>
+                            <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none shadow-sm">
+                                <option>All Departments</option>
+                                <option>CCS - College of Computer Studies</option>
+                                <option>Library Services</option>
+                                <option>Registrar's Office</option>
+                                <option>Maintenance & Utility</option>
                             </select>
-                            <i class='bx bx-chevron-down absolute right-3 bottom-3 text-gray-500 pointer-events-none'></i>
+                            <i class='bx bx-chevron-down absolute right-4 bottom-3.5 text-gray-500 pointer-events-none'></i>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-400 mb-1 ml-1">Student Name</label>
-                            <input type="text" placeholder="Enter name..." class="w-full bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400 mb-1 ml-1">Date</label>
-                            <input type="date" class="w-full bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <div class="relative">
+                                <i class='bx bx-search absolute left-4 top-3.5 text-gray-400'></i>
+                                <input type="text" placeholder="Enter name..." class="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 pl-10 pr-4 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                            </div>
                         </div>
                     </div>
                     
                     <div class="flex gap-3 mt-4">
-                        <button class="bg-green-100 text-green-700 px-6 py-2 rounded-lg font-bold text-sm hover:bg-green-200 transition">Apply Filter</button>
-                        <button class="bg-gray-100 text-gray-600 px-6 py-2 rounded-lg font-bold text-sm hover:bg-gray-200 transition">Reset</button>
+                        <button class="bg-blue-100 text-blue-700 px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-blue-200 transition shadow-sm border border-blue-200">Apply Filter</button>
+                        <button class="bg-gray-100 text-gray-600 px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-gray-200 transition shadow-sm border border-gray-200">Reset</button>
                     </div>
                 </div>
 
                 <div class="w-full lg:w-auto">
                     <div class="bg-gradient-to-r from-[#526DFE] to-[#637bfb] text-white px-8 py-4 rounded-xl shadow-lg text-center lg:text-right">
-                        <h2 class="text-xl font-bold uppercase tracking-wide">Supervisor Attendance Monitor</h2>
+                        <h2 class="text-xl font-bold uppercase tracking-wide">Global Attendance Monitor</h2>
                         <p class="text-blue-100 text-sm">Live Tracking System</p>
                     </div>
                 </div>
@@ -112,13 +126,14 @@
         </div>
 
         <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-            <div class="p-6 border-b border-gray-100 bg-gray-50">
-                <h3 class="font-bold text-gray-700 text-lg">Attendance Records</h3>
+            <div class="p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                <h3 class="font-bold text-gray-700 text-lg">Daily Attendance Records</h3>
+                <span class="text-xs font-bold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">Date: Jan 10, 2026</span>
             </div>
 
             <div class="w-full">
                 <div class="bg-[#526DFE] py-2 text-center border-y border-blue-600">
-                    <h4 class="text-white font-bold text-sm uppercase tracking-widest">Morning</h4>
+                    <h4 class="text-white font-bold text-sm uppercase tracking-widest">Morning Session</h4>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -127,16 +142,18 @@
                             <tr>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs">Date</th>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs">Student</th>
+                                <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs">Dept</th>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Status</th>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Time In</th>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Time Out</th>
-                                <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Hours Worked</th>
+                                <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Hours</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50 text-sm">
                             <tr class="hover:bg-blue-50/30 transition-colors">
                                 <td class="py-4 px-6 font-bold text-gray-500">Jan 10</td>
                                 <td class="py-4 px-6 font-bold text-gray-800">Miguel Angelo Barroa Basinillo</td>
+                                <td class="py-4 px-6 text-xs font-bold text-gray-400">CCS</td>
                                 <td class="py-4 px-6 text-center text-green-600 font-bold uppercase text-xs">On Duty</td>
                                 <td class="py-4 px-6 text-center font-bold text-gray-600">9:00 AM</td>
                                 <td class="py-4 px-6 text-center font-bold text-gray-600">11:00 PM</td>
@@ -145,6 +162,7 @@
                             <tr class="hover:bg-blue-50/30 transition-colors bg-red-50/20">
                                 <td class="py-4 px-6 font-bold text-gray-500">Jan 10</td>
                                 <td class="py-4 px-6 font-bold text-gray-800">Yvan Dale Lastimoso</td>
+                                <td class="py-4 px-6 text-xs font-bold text-gray-400">Library</td>
                                 <td class="py-4 px-6 text-center text-red-500 font-bold uppercase text-xs">Absent</td>
                                 <td class="py-4 px-6 text-center text-gray-300">---</td>
                                 <td class="py-4 px-6 text-center text-gray-300">---</td>
@@ -153,6 +171,7 @@
                             <tr class="hover:bg-blue-50/30 transition-colors">
                                 <td class="py-4 px-6 font-bold text-gray-500">Jan 10</td>
                                 <td class="py-4 px-6 font-bold text-gray-800">Ian Miguel Dumangon</td>
+                                <td class="py-4 px-6 text-xs font-bold text-gray-400">Reg.</td>
                                 <td class="py-4 px-6 text-center text-green-600 font-bold uppercase text-xs">On Duty</td>
                                 <td class="py-4 px-6 text-center font-bold text-gray-600">10:00 AM</td>
                                 <td class="py-4 px-6 text-center font-bold text-gray-600">12:00 PM</td>
@@ -165,7 +184,7 @@
 
             <div class="w-full mt-4">
                 <div class="bg-[#526DFE] py-2 text-center border-y border-blue-600">
-                    <h4 class="text-white font-bold text-sm uppercase tracking-widest">Afternoon</h4>
+                    <h4 class="text-white font-bold text-sm uppercase tracking-widest">Afternoon Session</h4>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -174,24 +193,27 @@
                             <tr>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs">Date</th>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs">Student</th>
+                                <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs">Dept</th>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Status</th>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Time In</th>
                                 <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Time Out</th>
-                                <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Hours Worked</th>
+                                <th class="py-4 px-6 font-bold text-gray-600 uppercase text-xs text-center">Hours</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50 text-sm">
                             <tr class="hover:bg-blue-50/30 transition-colors">
                                 <td class="py-4 px-6 font-bold text-gray-500">Jan 10</td>
                                 <td class="py-4 px-6 font-bold text-gray-800">Miguel Angelo Barroa Basinillo</td>
+                                <td class="py-4 px-6 text-xs font-bold text-gray-400">CCS</td>
                                 <td class="py-4 px-6 text-center text-green-600 font-bold uppercase text-xs">On Duty</td>
                                 <td class="py-4 px-6 text-center font-bold text-gray-600">1:00 PM</td>
-                                <td class="py-4 px-6 text-center font-bold text-gray-600">12:00 PM</td>
+                                <td class="py-4 px-6 text-center font-bold text-gray-600">3:00 PM</td>
                                 <td class="py-4 px-6 text-center font-bold text-gray-800">2 h</td>
                             </tr>
                             <tr class="hover:bg-blue-50/30 transition-colors bg-red-50/20">
                                 <td class="py-4 px-6 font-bold text-gray-500">Jan 10</td>
                                 <td class="py-4 px-6 font-bold text-gray-800">Yvan Dale Lastimoso</td>
+                                <td class="py-4 px-6 text-xs font-bold text-gray-400">Library</td>
                                 <td class="py-4 px-6 text-center text-red-500 font-bold uppercase text-xs">Absent</td>
                                 <td class="py-4 px-6 text-center text-gray-300">---</td>
                                 <td class="py-4 px-6 text-center text-gray-300">---</td>
@@ -200,6 +222,7 @@
                             <tr class="hover:bg-blue-50/30 transition-colors">
                                 <td class="py-4 px-6 font-bold text-gray-500">Jan 10</td>
                                 <td class="py-4 px-6 font-bold text-gray-800">Ian Miguel Dumangon</td>
+                                <td class="py-4 px-6 text-xs font-bold text-gray-400">Reg.</td>
                                 <td class="py-4 px-6 text-center text-green-600 font-bold uppercase text-xs">On Duty</td>
                                 <td class="py-4 px-6 text-center font-bold text-gray-600">3:00 PM</td>
                                 <td class="py-4 px-6 text-center font-bold text-gray-600">5:00 PM</td>

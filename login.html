@@ -87,6 +87,7 @@
                             <option value="student">Student Portal</option>
                             <option value="supervisor">Supervisor Portal</option>
                             <option value="admin">Administrator Portal</option>
+                            <option value="coordinator">Coordinator Portal</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-400 group-hover:text-blue-600 transition-colors">
                             <i class='bx bx-chevron-down text-2xl'></i>
@@ -151,6 +152,8 @@
                 window.location.href = 'student-dashboard.html';
             } else if (role === 'supervisor') {
                 window.location.href = 'supervisor-dashboard.html';
+            } else if (role === 'coordinator') {
+                window.location.href = 'coordinator-dashboard.html'; // ADD THIS BLOCK
             } else if (role === 'admin') {
                 window.location.href = 'admin-dashboard.html';
             }

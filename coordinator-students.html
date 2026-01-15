@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHRM - Coordinator Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-academic { font-family: 'Merriweather', serif; }
+        .font-sans-ui { font-family: 'Roboto', sans-serif; }
+        
+        .watermark-fixed {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60vh; height: 60vh;
+            background-image: url('assets/logo.png');
+            background-repeat: no-repeat; background-position: center; background-size: contain;
+            opacity: 0.08; z-index: 0; pointer-events: none;
+        }
+
+        .sidebar-bg { background-color: #1e3a8a; }
+        .sidebar-active { 
+            background-color: #facc15; 
+            color: #1e3a8a; 
+            font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-hover:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
+
+    <div class="watermark-fixed"></div>
+
+    <aside class="w-72 sidebar-bg text-white flex flex-col shadow-2xl z-20 flex-shrink-0">
+        <div class="p-6 flex flex-col items-center border-b border-blue-800/50">
+            <img src="assets/logo.png" alt="FCU Logo" class="w-24 h-24 rounded-full shadow-lg mb-3 bg-white p-1">
+            <h1 class="font-serif-academic text-xl font-bold tracking-wide text-center">TechHRM</h1>
+            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">WSPO Coordinator</p>
+        </div>
+
+        <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto">
+            <a href="coordinator-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-dashboard text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Dashboard</span>
+            </a>
+            
+            <a href="coordinator-students.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
+                <i class='bx bxs-group text-2xl mr-4'></i>
+                <span class="text-md">Students Masterlist</span>
+            </a>
+
+            <a href="coordinator-hiring-status.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-user-badge text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Hiring Status</span>
+            </a>
+            <a href="coordinator-attendance.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-time-five text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Attendance Monitor</span>
+            </a>
+            <a href="coordinator-penalty-logger.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-error-circle text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Penalty Logger</span>
+            </a>
+            <a href="coordinator-payroll.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-wallet text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Payroll</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-blue-800/50">
+            <button onclick="if(confirm('Sign Out?')) location.href='index.html'" class="w-full flex items-center justify-center p-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition-colors shadow-lg">
+                <i class='bx bx-log-out text-2xl mr-2'></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative z-10 p-8">
+
+        <div id="masterlistView" class="fade-in">
+            <div class="bg-gradient-to-r from-[#526DFE] to-[#637bfb] rounded-2xl shadow-xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+                <div class="flex items-center gap-4 z-10">
+                    <div class="p-3 bg-white/20 rounded-xl backdrop-blur-sm border border-white/10">
+                        <i class='bx bxs-folder-open text-4xl text-white'></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-black text-white uppercase tracking-wider">WSPO Student Masterlist</h1>
+                        <p class="text-blue-100 text-sm">Managing all student workers across all departments</p>
+                    </div>
+                </div>
+                <div class="flex gap-3 z-10 w-full md:w-auto">
+                    <div class="relative w-full md:w-72">
+                        <i class='bx bx-search absolute left-3 top-3.5 text-gray-500 text-lg'></i>
+                        <input type="text" placeholder="Search any student..." class="w-full pl-10 pr-4 py-3 rounded-lg shadow-lg bg-white">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider">Name</th>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider">Student ID</th>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider">Department</th>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider">Supervisor</th>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider text-center">Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-sm">
+                            <tr class="hover:bg-blue-50/40 transition-colors">
+                                <td class="py-4 px-6 font-bold text-gray-700">Yvan Dale Lastimoso</td>
+                                <td class="py-4 px-6 text-gray-500 font-medium">23-CCS1-0001</td>
+                                <td class="py-4 px-6"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">CCS</span></td>
+                                <td class="py-4 px-6 text-gray-600">Mrs. Jonah P. Gafate</td>
+                                <td class="py-4 px-6 text-center">
+                                    <button onclick="switchView('profile')" class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View Profile]</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-blue-50/40 transition-colors">
+                                <td class="py-4 px-6 font-bold text-gray-700">Miguel Angelo Barroa Basinillo</td>
+                                <td class="py-4 px-6 text-gray-500 font-medium">23-CCS1-0048</td>
+                                <td class="py-4 px-6"><span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">LIBRARY</span></td>
+                                <td class="py-4 px-6 text-gray-600">Mr. John Doe</td>
+                                <td class="py-4 px-6 text-center">
+                                    <button onclick="switchView('profile')" class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View Profile]</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="profileView" class="hidden fade-in">
+            <button onclick="switchView('masterlist')" class="flex items-center gap-2 text-gray-500 hover:text-blue-600 font-bold mb-6 transition-colors">
+                <i class='bx bx-arrow-back text-xl'></i> Back to Masterlist
+            </button>
+
+            <div class="bg-[#526DFE] rounded-t-2xl shadow-xl p-8 relative mt-16 flex flex-col md:flex-row justify-between items-end">
+                <div class="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-6">
+                    <div class="w-32 h-32 rounded-full bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center -mt-20 md:-mt-0 md:-ml-4">
+                        <i class='bx bxs-user text-6xl text-gray-400'></i>
+                    </div>
+                    <div class="text-center md:text-left text-white">
+                        <h1 class="text-3xl font-bold">Yvan Dale Lastimoso</h1>
+                        <p class="text-blue-100">BSIT | 3rd Year | Library Services</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-6 md:mt-0 z-10">
+                    <button onclick="location.href='coordinator-evaluation.html'" class="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold py-2.5 px-5 rounded-lg border border-white/20 shadow-sm transition flex items-center gap-2">
+                        <i class='bx bx-message-square-dots text-xl'></i> Evaluation
+                    </button>
+                    
+                    <button onclick="location.href='coordinator-student-assessment.html'" class="bg-yellow-400 text-blue-900 font-bold py-2.5 px-5 rounded-lg shadow-md hover:bg-yellow-300 transition flex items-center gap-2">
+                        <i class='bx bxs-file-find text-xl'></i> Assessment Record
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-b-2xl shadow-xl p-8 border-x border-b border-gray-200 relative">
+                
+                <button onclick="switchView('edit')" class="absolute top-8 right-8 text-blue-600 hover:text-blue-800 flex items-center gap-1 font-bold bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 transition">
+                    <i class='bx bx-edit'></i> Edit Profile
+                </button>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-y-8 gap-x-12 mt-4">
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Gender</p><p class="font-bold text-lg">MALE</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Date of Birth</p><p class="font-bold text-lg">Nov 13, 2004</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Enrollment</p><p class="font-bold text-lg text-green-600">ENROLLED</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Contact</p><p class="font-bold text-lg">+63966123456</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Email</p><p class="font-bold text-lg">yvandale@gmail.com</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Scholarship</p><p class="font-bold text-lg">ACADEMIC (50%)</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="editView" class="hidden fade-in">
+             <div class="mb-6 flex items-center gap-4">
+                 <button onclick="switchView('profile')" class="text-gray-400 hover:text-blue-600 text-xl"><i class='bx bx-arrow-back'></i></button>
+                 <h2 class="text-2xl font-bold text-blue-900 flex items-center gap-2">
+                    <i class='bx bxs-edit-alt'></i> Edit Student Data
+                 </h2>
+             </div>
+
+             <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+                 <form>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                         <div>
+                             <label class="block text-sm font-bold text-gray-700 mb-1">First Name</label>
+                             <input type="text" value="Yvan Dale" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 focus:bg-white">
+                         </div>
+                         <div>
+                             <label class="block text-sm font-bold text-gray-700 mb-1">Last Name</label>
+                             <input type="text" value="Lastimoso" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 focus:bg-white">
+                         </div>
+                         <div>
+                             <label class="block text-sm font-bold text-gray-700 mb-1">Student ID <span class="text-xs font-normal text-red-500">(Read Only)</span></label>
+                             <input type="text" value="23-CCS1-0001" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed" disabled>
+                         </div>
+
+                         <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Department Placement</label>
+                            <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <option selected>Library Services</option>
+                                <option>CCS Department</option>
+                                <option>Registrar's Office</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Assigned Supervisor</label>
+                            <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <option selected>Mrs. Jonah P. Gafate</option>
+                                <option>Mr. John Doe</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Year Level</label>
+                             <input type="number" value="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Contact Number</label>
+                             <input type="text" value="+63966123456" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
+                             <input type="email" value="yvandale@gmail.com" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                        </div>
+                     </div>
+
+                     <div class="mt-8 flex justify-end gap-4 border-t pt-6">
+                         <button type="button" onclick="switchView('profile')" class="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors">Cancel</button>
+                         <button type="button" onclick="alert('Student Profile Updated Successfully!'); switchView('profile')" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-md">Save Changes</button>
+                     </div>
+                 </form>
+             </div>
+        </div>
+
+    </main>
+
+<script>
+        // 1. Function to handle view switching
+        function switchView(viewName) {
+            const masterlist = document.getElementById('masterlistView');
+            const profile = document.getElementById('profileView');
+            const edit = document.getElementById('editView');
+
+            // Hide all first
+            masterlist.classList.add('hidden');
+            profile.classList.add('hidden');
+            edit.classList.add('hidden');
+
+            // Show target
+            if (viewName === 'masterlist') {
+                masterlist.classList.remove('hidden');
+                // Remove query param from URL so refresh doesn't stick to profile
+                window.history.replaceState(null, null, window.location.pathname);
+            } else if (viewName === 'profile') {
+                profile.classList.remove('hidden');
+            } else if (viewName === 'edit') {
+                edit.classList.remove('hidden');
+            }
+            
+            document.querySelector('main').scrollTop = 0;
+        }
+
+        // 2. Check URL on Load (This fixes your issue)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const view = urlParams.get('view');
+
+            if (view === 'profile') {
+                switchView('profile');
+            }
+        };
+    </script>
+</body>
+</html>

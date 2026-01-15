@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechHRM Admin - Assessment Record</title>
+    <title>TechHRM - Assessment Record</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -38,21 +38,33 @@
         <div class="p-6 flex flex-col items-center border-b border-blue-800/50">
             <img src="assets/logo.png" alt="FCU Logo" class="w-24 h-24 rounded-full shadow-lg mb-3 bg-white p-1">
             <h1 class="font-serif-academic text-xl font-bold tracking-wide text-center">TechHRM</h1>
-            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">Administrator</p>
+            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">Coordinator Portal</p>
         </div>
 
         <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto">
-            <a href="admin-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+            <a href="coordinator-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-dashboard text-2xl mr-4 group-hover:text-yellow-400'></i>
                 <span class="text-md font-medium">Dashboard</span>
             </a>
             
-            <a href="admin-students.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
+            <a href="coordinator-students.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
                 <i class='bx bxs-group text-2xl mr-4'></i>
                 <span class="text-md">Students</span>
             </a>
 
-            <a href="#" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+            <a href="coordinator-hiring-status.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-user-badge text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Hiring Status</span>
+            </a>
+            <a href="coordinator-attendance.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-time-five text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Attendance Monitor</span>
+            </a>
+            <a href="coordinator-penalty-logger.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-error-circle text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Penalty Logger</span>
+            </a>
+            <a href="coordinator-payroll.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-wallet text-2xl mr-4 group-hover:text-yellow-400'></i>
                 <span class="text-md font-medium">Payroll</span>
             </a>
@@ -67,12 +79,15 @@
 
     <main class="flex-1 overflow-y-auto relative z-10">
         
-        <div class="bg-[#526DFE] p-6 shadow-md flex items-center gap-4 text-white sticky top-0 z-30">
-            <button onclick="location.href='admin-students.html'" class="hover:bg-white/20 p-2 rounded-full transition-colors">
-                <i class='bx bxs-left-arrow-alt text-3xl'></i>
-            </button>
+    <div class="bg-[#526DFE] p-6 shadow-md flex items-center gap-4 text-white sticky top-0 z-30">
+        <button onclick="location.href='coordinator-students.html?view=profile'" class="hover:bg-white/20 p-2 rounded-full transition-colors group">
+            <i class='bx bxs-left-arrow-alt text-3xl group-hover:-translate-x-1 transition-transform'></i>
+        </button>
+        <div>
             <h1 class="text-2xl font-bold tracking-wide">Yvan Dale Lastimoso</h1>
+            <p class="text-blue-200 text-xs">Financial Assessment Record</p>
         </div>
+    </div>
 
         <div class="p-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">

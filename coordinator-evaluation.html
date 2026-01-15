@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHRM - Evaluation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-academic { font-family: 'Merriweather', serif; }
+        .font-sans-ui { font-family: 'Roboto', sans-serif; }
+        
+        .watermark-fixed {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60vh; height: 60vh;
+            background-image: url('assets/logo.png');
+            background-repeat: no-repeat; background-position: center; background-size: contain;
+            opacity: 0.08; z-index: 0; pointer-events: none;
+        }
+
+        .sidebar-bg { background-color: #1e3a8a; }
+        .sidebar-active { 
+            background-color: #facc15; 
+            color: #1e3a8a; 
+            font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-hover:hover { background-color: rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
+
+    <div class="watermark-fixed"></div>
+
+    <aside class="w-72 sidebar-bg text-white flex flex-col shadow-2xl z-20 flex-shrink-0">
+        <div class="p-6 flex flex-col items-center border-b border-blue-800/50">
+            <img src="assets/logo.png" alt="FCU Logo" class="w-24 h-24 rounded-full shadow-lg mb-3 bg-white p-1">
+            <h1 class="font-serif-academic text-xl font-bold tracking-wide text-center">TechHRM</h1>
+            <p class="text-xs text-blue-200 uppercase tracking-widest mt-1">WSPO Coordinator</p>
+        </div>
+
+        <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto">
+            <a href="coordinator-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-dashboard text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Dashboard</span>
+            </a>
+            
+            <a href="coordinator-students.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
+                <i class='bx bxs-group text-2xl mr-4'></i>
+                <span class="text-md">Students</span>
+            </a>
+
+            <a href="coordinator-hiring-status.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-user-badge text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Hiring Status</span>
+            </a>
+            <a href="coordinator-attendance.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-time-five text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Attendance Monitor</span>
+            </a>
+            <a href="coordinator-penalty-logger.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-error-circle text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Penalty Logger</span>
+            </a>
+            <a href="coordinator-payroll.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+                <i class='bx bxs-wallet text-2xl mr-4 group-hover:text-yellow-400'></i>
+                <span class="text-md font-medium">Payroll</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-blue-800/50">
+            <button onclick="if(confirm('Sign Out?')) location.href='index.html'" class="w-full flex items-center justify-center p-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition-colors shadow-lg">
+                <i class='bx bx-log-out text-2xl mr-2'></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative z-10">
+        
+        <div class="bg-[#526DFE] p-6 shadow-md flex items-center gap-4 text-white sticky top-0 z-30">
+            <button onclick="location.href='coordinator-students.html?view=profile'" class="hover:bg-white/20 p-2 rounded-full transition-colors group">
+                <i class='bx bxs-left-arrow-alt text-3xl group-hover:-translate-x-1 transition-transform'></i>
+            </button>
+            <div>
+                <h1 class="text-2xl font-bold tracking-wide">Yvan Dale Lastimoso</h1>
+                <p class="text-blue-200 text-xs">Performance Evaluation & Feedback</p>
+            </div>
+        </div>
+
+        <div class="p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <i class='bx bxs-star text-yellow-400'></i> New Performance Review
+                    </h2>
+
+                    <form>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Evaluator</label>
+                                <input type="text" value="Mrs. Jonah P. Gafate (Supervisor)" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-3 font-bold text-gray-700" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Evaluation Period</label>
+                                <select class="w-full bg-white border border-gray-300 rounded-lg p-3 outline-none focus:border-blue-500">
+                                    <option>Midterm Evaluation</option>
+                                    <option>Final Evaluation</option>
+                                    <option>Incident Report</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 mb-6">
+                            <p class="text-xs font-bold text-blue-600 uppercase tracking-widest border-b border-gray-100 pb-2">Performance Criteria (1-5)</p>
+                            
+                            <div class="flex items-center justify-between">
+                                <label class="font-bold text-gray-700">Quality of Work</label>
+                                <input type="range" min="1" max="5" value="4" class="w-48 accent-blue-600">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <label class="font-bold text-gray-700">Punctuality & Attendance</label>
+                                <input type="range" min="1" max="5" value="5" class="w-48 accent-blue-600">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <label class="font-bold text-gray-700">Initiative & Attitude</label>
+                                <input type="range" min="1" max="5" value="4" class="w-48 accent-blue-600">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Feedback / Comments</label>
+                            <textarea rows="4" class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter detailed feedback here..."></textarea>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="button" onclick="alert('Evaluation Submitted!')" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition shadow-lg transform hover:-translate-y-1">
+                                Submit Evaluation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden h-full flex flex-col">
+                    <div class="p-6 border-b border-gray-100 bg-gray-50">
+                        <h3 class="font-bold text-gray-700">Evaluation History</h3>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                        
+                        <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition bg-white relative">
+                            <div class="absolute top-4 right-4 bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Passed</div>
+                            <p class="text-xs text-gray-400 font-bold uppercase mb-1">Dec 15, 2025</p>
+                            <h4 class="font-bold text-blue-900">Midterm Review</h4>
+                            <div class="flex text-yellow-400 text-sm my-2">
+                                <i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bx-star'></i>
+                            </div>
+                            <p class="text-sm text-gray-600 italic">"Yvan shows great dedication to his tasks. Need improvement on organization."</p>
+                            <p class="text-xs text-gray-400 mt-2 font-bold">- Mrs. Gafate</p>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition bg-white relative">
+                            <div class="absolute top-4 right-4 bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Passed</div>
+                            <p class="text-xs text-gray-400 font-bold uppercase mb-1">Oct 10, 2025</p>
+                            <h4 class="font-bold text-blue-900">Initial Assessment</h4>
+                            <div class="flex text-yellow-400 text-sm my-2">
+                                <i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i>
+                            </div>
+                            <p class="text-sm text-gray-600 italic">"Excellent start. Very punctual."</p>
+                            <p class="text-xs text-gray-400 mt-2 font-bold">- Mr. Coordinator</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

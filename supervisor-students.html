@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechHRM - Student Masterlist</title>
+    <title>TechHRM - Supervisor Students</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -20,15 +20,16 @@
             opacity: 0.08; z-index: 0; pointer-events: none;
         }
 
-        /* Supervisor Theme (Slightly darker blue sidebar base) */
         .sidebar-bg { background-color: #1e3a8a; }
         .sidebar-active { 
-            background-color: #facc15; /* Yellow */
-            color: #1e3a8a; /* Blue Text */
+            background-color: #facc15; 
+            color: #1e3a8a; 
             font-weight: bold;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .sidebar-hover:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
@@ -43,37 +44,18 @@
         </div>
 
         <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto">
-            
             <a href="supervisor-dashboard.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-dashboard text-2xl mr-4 group-hover:text-yellow-400'></i>
                 <span class="text-md font-medium">Dashboard</span>
             </a>
-
             <a href="supervisor-students.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
                 <i class='bx bxs-group text-2xl mr-4'></i>
                 <span class="text-md">Students</span>
             </a>
-
-            <a href="supervisor-hiring-status.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
-                <i class='bx bxs-user-badge text-2xl mr-4 group-hover:text-yellow-400'></i>
-                <span class="text-md font-medium">Hiring Status</span>
-            </a>
-
             <a href="supervisor-attendance-monitor.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-time-five text-2xl mr-4 group-hover:text-yellow-400'></i>
                 <span class="text-md font-medium">Attendance Monitor</span>
             </a>
-
-            <a href="supervisor-penalty-logger.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
-                <i class='bx bxs-error-circle text-2xl mr-4 group-hover:text-yellow-400'></i>
-                <span class="text-md font-medium">Penalty Logger</span>
-            </a>
-
-            <a href="supervisor-payroll.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
-                <i class='bx bxs-wallet text-2xl mr-4 group-hover:text-yellow-400'></i>
-                <span class="text-md font-medium">Payroll</span>
-            </a>
-
         </nav>
 
         <div class="p-4 border-t border-blue-800/50">
@@ -84,159 +66,116 @@
     </aside>
 
     <main class="flex-1 overflow-y-auto relative z-10 p-8">
-        
-        <div class="bg-gradient-to-r from-blue-900 to-blue-700 rounded-2xl shadow-xl p-8 mb-8 text-white relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="relative z-10 flex items-center gap-4">
-                <div class="bg-white/10 p-3 rounded-xl backdrop-blur-sm">
-                    <i class='bx bxs-user-detail text-4xl text-yellow-400'></i>
-                </div>
-                <div>
-                    <h1 class="text-3xl font-black uppercase tracking-wide">Student Assistant Masterlist</h1>
-                    <p class="text-blue-200 text-sm">Manage and view all student worker records</p>
+
+        <div id="masterlistView" class="fade-in">
+            <div class="bg-white rounded-2xl shadow-md p-6 mb-8 flex items-center justify-between border border-gray-200">
+                <h1 class="text-2xl font-bold text-gray-800">Assigned Student Workers</h1>
+                <div class="relative w-96">
+                    <i class='bx bx-search absolute left-4 top-3 text-gray-400 text-lg'></i>
+                    <input type="text" placeholder="Search Student..." class="w-full pl-10 pr-4 py-2.5 rounded-full bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-blue-400 focus:outline-none">
                 </div>
             </div>
 
-            <div class="flex gap-3 w-full md:w-auto relative z-10">
-                <div class="relative flex-1 md:w-64">
-                    <i class='bx bx-search absolute left-3 top-3.5 text-gray-400'></i>
-                    <input type="text" placeholder="Search Student..." class="w-full pl-10 pr-4 py-3 rounded-xl text-gray-700 focus:outline-none shadow-lg">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider">Name</th>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider">Student ID</th>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider">Course</th>
+                                <th class="py-5 px-6 font-bold text-gray-800 uppercase text-xs tracking-wider text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-sm">
+                            <tr class="hover:bg-blue-50/40 transition-colors">
+                                <td class="py-4 px-6 font-bold text-gray-700">Yvan Dale Lastimoso</td>
+                                <td class="py-4 px-6 text-gray-500 font-medium">23-CCS1-0001</td>
+                                <td class="py-4 px-6 text-gray-600">BSIT</td>
+                                <td class="py-4 px-6 text-center">
+                                    <button onclick="switchView('profile')" class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-blue-50/40 transition-colors">
+                                <td class="py-4 px-6 font-bold text-gray-700">Miguel Angelo Barroa Basinillo</td>
+                                <td class="py-4 px-6 text-gray-500 font-medium">23-CCS1-0048</td>
+                                <td class="py-4 px-6 text-gray-600">BSCS</td>
+                                <td class="py-4 px-6 text-center">
+                                    <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="relative">
-                    <select class="appearance-none bg-blue-800 border border-blue-600 text-white py-3 pl-4 pr-10 rounded-xl font-bold hover:bg-blue-700 transition cursor-pointer shadow-lg">
-                        <option>Filter by...</option>
-                        <option>Department</option>
-                        <option>Status</option>
-                    </select>
-                    <i class='bx bx-chevron-down absolute right-3 top-3.5 text-white pointer-events-none'></i>
-                </div>
-            </div>
-            
-            <div class="absolute right-0 top-0 opacity-10 transform translate-x-10 -translate-y-10">
-                <i class='bx bxs-contact text-[10rem]'></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-gray-50 border-b border-gray-200">
-                        <tr>
-                            <th class="py-5 px-6 font-bold text-gray-500 uppercase text-xs tracking-wider">Name</th>
-                            <th class="py-5 px-6 font-bold text-gray-500 uppercase text-xs tracking-wider">Student ID</th>
-                            <th class="py-5 px-6 font-bold text-gray-500 uppercase text-xs tracking-wider">Department</th>
-                            <th class="py-5 px-6 font-bold text-gray-500 uppercase text-xs tracking-wider">Immediate Supervisor</th>
-                            <th class="py-5 px-6 font-bold text-gray-500 uppercase text-xs tracking-wider text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100 text-sm">
-                        
-                        <tr class="hover:bg-blue-50/40 transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold shadow-sm">YL</div>
-                                    <span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">Yvan Dale Lastimoso</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 font-medium text-gray-500">23-CCS1-0001</td>
-                            <td class="py-4 px-6"><span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
-                            <td class="py-4 px-6 font-medium text-gray-700">Mrs. Jonah P. Gafate</td>
-                            <td class="py-4 px-6 text-center">
-                                <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
-                            </td>
-                        </tr>
+        <div id="profileView" class="hidden fade-in">
+            <button onclick="switchView('masterlist')" class="flex items-center gap-2 text-gray-500 hover:text-blue-600 font-bold mb-6 transition-colors">
+                <i class='bx bx-arrow-back text-xl'></i> Back to List
+            </button>
 
-                        <tr class="hover:bg-blue-50/40 transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold shadow-sm">MB</div>
-                                    <span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">Miguel Angelo Barroa Basinillo</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 font-medium text-gray-500">23-CCS1-0048</td>
-                            <td class="py-4 px-6"><span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
-                            <td class="py-4 px-6 font-medium text-gray-700">Mrs. Jonah P. Gafate</td>
-                            <td class="py-4 px-6 text-center">
-                                <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
-                            </td>
-                        </tr>
+            <div class="bg-[#526DFE] rounded-t-2xl shadow-xl p-8 relative mt-16 flex flex-col md:flex-row justify-between items-end">
+                <div class="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-6">
+                    <div class="w-32 h-32 rounded-full bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center -mt-20 md:-mt-0 md:-ml-4">
+                        <i class='bx bxs-user text-6xl text-gray-400'></i>
+                    </div>
+                    <div class="text-center md:text-left text-white">
+                        <h1 class="text-3xl font-bold underline decoration-white/30 underline-offset-8">Yvan Dale Lastimoso</h1>
+                        <p class="text-blue-100 mt-2">BSIT | 3rd Year | Clerical & Janitorial</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-3 mt-6 md:mt-0 z-10 w-full md:w-auto">
+                    
+                    <button onclick="location.href='supervisor-evaluation.html'" class="bg-white text-blue-600 font-bold py-2.5 px-6 rounded-full shadow-lg hover:bg-gray-100 transition flex justify-center items-center gap-2">
+                        <span>Evaluation/Feedback</span>
+                    </button>
+                    
+                    <button onclick="location.href='supervisor-student-assessment.html'" class="bg-white/20 backdrop-blur-md border border-white/40 text-white font-bold py-2.5 px-6 rounded-full shadow-lg hover:bg-white/30 transition flex justify-center items-center gap-2">
+                        <span>Assessment Record</span>
+                    </button>
 
-                        <tr class="hover:bg-blue-50/40 transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold shadow-sm">MB</div>
-                                    <span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">Miguel Angelo Barroa Basinillo</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 font-medium text-gray-500">23-CCS1-0048</td>
-                            <td class="py-4 px-6"><span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
-                            <td class="py-4 px-6 font-medium text-gray-700">Mrs. Jonah P. Gafate</td>
-                            <td class="py-4 px-6 text-center">
-                                <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
-                            </td>
-                        </tr>
-
-                        <tr class="hover:bg-blue-50/40 transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center font-bold shadow-sm">MB</div>
-                                    <span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">Miguel Angelo Barroa Basinillo</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 font-medium text-gray-500">23-CCS1-0048</td>
-                            <td class="py-4 px-6"><span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
-                            <td class="py-4 px-6 font-medium text-gray-700">Mrs. Jonah P. Gafate</td>
-                            <td class="py-4 px-6 text-center">
-                                <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
-                            </td>
-                        </tr>
-
-                        <tr class="hover:bg-blue-50/40 transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center font-bold shadow-sm">MB</div>
-                                    <span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">Miguel Angelo Barroa Basinillo</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 font-medium text-gray-500">23-CCS1-0048</td>
-                            <td class="py-4 px-6"><span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
-                            <td class="py-4 px-6 font-medium text-gray-700">Mrs. Jonah P. Gafate</td>
-                            <td class="py-4 px-6 text-center">
-                                <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
-                            </td>
-                        </tr>
-
-                        <tr class="hover:bg-blue-50/40 transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold shadow-sm">MB</div>
-                                    <span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">Miguel Angelo Barroa Basinillo</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 font-medium text-gray-500">23-CCS1-0048</td>
-                            <td class="py-4 px-6"><span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-bold text-xs">CCS</span></td>
-                            <td class="py-4 px-6 font-medium text-gray-700">Mrs. Jonah P. Gafate</td>
-                            <td class="py-4 px-6 text-center">
-                                <button class="text-blue-600 hover:text-blue-800 font-bold hover:underline">[View]</button>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
+                </div>
             </div>
-            
-            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-between items-center">
-                <span class="text-sm text-gray-500">Showing 1-6 of 24 students</span>
-                <div class="flex gap-2">
-                    <button class="px-3 py-1 border rounded bg-white text-gray-600 hover:bg-gray-100">Prev</button>
-                    <button class="px-3 py-1 border rounded bg-blue-600 text-white">1</button>
-                    <button class="px-3 py-1 border rounded bg-white text-gray-600 hover:bg-gray-100">2</button>
-                    <button class="px-3 py-1 border rounded bg-white text-gray-600 hover:bg-gray-100">3</button>
-                    <button class="px-3 py-1 border rounded bg-white text-gray-600 hover:bg-gray-100">Next</button>
+
+            <div class="bg-white rounded-b-2xl shadow-xl p-8 border-x border-b border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-y-8 gap-x-12 mt-4">
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Gender</p><p class="font-bold text-lg">MALE</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Date of Birth</p><p class="font-bold text-lg">November 13, 2004</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Enrollment Status</p><p class="font-bold text-lg text-green-600">ENROLLED</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Contact Number</p><p class="font-bold text-lg">+63966123456</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Email Address</p><p class="font-bold text-lg">yvandale@gmail.com</p></div>
+                    <div><p class="text-xs font-bold text-gray-400 uppercase">Scholarship</p><p class="font-bold text-lg">ACADEMIC (50%)</p></div>
                 </div>
             </div>
         </div>
 
     </main>
 
+    <script>
+        function switchView(viewName) {
+            const masterlist = document.getElementById('masterlistView');
+            const profile = document.getElementById('profileView');
+
+            masterlist.classList.add('hidden');
+            profile.classList.add('hidden');
+
+            if (viewName === 'masterlist') {
+                masterlist.classList.remove('hidden');
+                window.history.replaceState(null, null, window.location.pathname);
+            } else if (viewName === 'profile') {
+                profile.classList.remove('hidden');
+            }
+        }
+        
+        // Handle URL parameter for returning from Assessment/Evaluation pages
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('view') === 'profile') {
+                switchView('profile');
+            }
+        };
+    </script>
 </body>
 </html>
