@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechHRM - Attendance</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
@@ -24,12 +25,8 @@
         .sidebar-active { background-color: #facc15; color: #1e3a8a; font-weight: bold; }
         .sidebar-hover:hover { background-color: rgba(255, 255, 255, 0.1); }
 
-        .scan-laser {
-            position: absolute; width: 100%; height: 2px; background: #ef4444;
-            top: 0; box-shadow: 0 0 4px #ef4444;
-            animation: scan-move 2s infinite linear;
-        }
-        @keyframes scan-move { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
+        /* Toast Animation */
+        .toast-enter { transform: translateY(0) !important; opacity: 1 !important; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
@@ -50,12 +47,10 @@
                 <i class='bx bxs-time-five text-3xl mr-4'></i>
                 <span class="text-lg">Attendance</span>
             </a>
-
             <a href="student-assessment.html" class="flex items-center p-4 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-file-find text-3xl mr-4'></i>
                 <span class="text-lg">Assessment</span>
             </a>
-                        
             <a href="schedule.html" class="flex items-center p-4 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-calendar text-3xl mr-4 group-hover:text-yellow-400'></i>
                 <span class="text-lg">Schedule</span>
@@ -73,89 +68,79 @@
     </aside>
 
     <main class="flex-1 overflow-y-auto relative z-10 p-8">
-        <h1 class="text-4xl font-bold text-blue-900 mb-8 pl-4 border-l-8 border-yellow-400">Attendance Monitoring</h1>
+        
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-900 pl-4 border-l-8 border-yellow-400">Attendance Monitoring</h1>
+            <div class="text-right">
+                <p id="clock" class="text-2xl font-mono font-bold text-gray-700">00:00:00</p>
+                <p class="text-sm text-gray-500 uppercase font-bold" id="dateDisplay">...</p>
+            </div>
+        </div>
 
         <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 overflow-hidden max-w-5xl mx-auto min-h-[600px] flex flex-col">
             
             <div class="relative py-6 text-center border-b-2 border-gray-100 bg-gray-50/50">
-                <h2 class="text-2xl font-bold text-gray-800 uppercase tracking-wide">Today's Status</h2>
+                <h2 class="text-2xl font-bold text-gray-800 uppercase tracking-wide">System Display</h2>
             </div>
 
-            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                        <span class="text-gray-500 font-bold text-lg">Date</span>
-                        <span id="displayDate" class="text-gray-800 font-bold text-xl">...</span>
-                    </div>
-                    <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                        <span class="text-gray-500 font-bold text-lg">Time In</span>
-                        <span id="displayTimeIn" class="text-gray-800 font-bold text-xl">--:--</span>
-                    </div>
-                </div>
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                        <span class="text-gray-500 font-bold text-lg">Time Out</span>
-                        <span id="displayTimeOut" class="text-gray-800 font-bold text-xl">--:--</span>
-                    </div>
-                    <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                        <span class="text-gray-500 font-bold text-lg">Status</span>
-                        <span id="displayStatus" class="text-gray-400 font-bold text-xl uppercase">Pending</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-1 bg-blue-50/50 p-10 border-t border-blue-100 flex flex-col items-center justify-center transition-all duration-500" id="selectionContainer">
+            <div class="flex-1 p-10 flex flex-col items-center justify-start transition-all duration-500">
                 
-                <h3 class="text-2xl font-bold text-blue-900 mb-6 text-center">Select Your Duty/Event</h3>
+                <h3 class="text-2xl font-bold text-blue-900 mb-6 text-center">Select Duty Type</h3>
                 
                 <div class="relative w-full max-w-2xl mb-8">
-                    <select id="activityMode" class="w-full p-6 text-xl border-2 border-blue-300 rounded-2xl bg-white text-gray-700 font-bold focus:border-yellow-400 focus:ring-4 focus:ring-blue-100 focus:outline-none appearance-none cursor-pointer shadow-sm transition-shadow">
-                        <option value="" disabled selected>-- Click to Choose Activity --</option>
+                    <select id="eventSelect" onchange="updateDisplay()" class="w-full p-5 border-2 border-gray-300 rounded-2xl bg-white font-bold text-gray-700 focus:border-blue-500 focus:outline-none appearance-none text-lg shadow-sm cursor-pointer">
+                        <option value="" disabled selected>-- Choose Activity --</option>
                         
-                        <optgroup label="REGULAR DUTIES (Passcode Required)">
-                            <option value="Normal/Clerical Duty">Normal/Clerical Duty</option>
-                            <option value="Request Duty">Request Duty</option>
-                            <option value="Janitorial Duty">Janitorial Duty</option>
+                        <optgroup label="REGULAR DUTIES (Passcode)">
+                            <option value="DUTY:NORMAL_CLERICAL">Normal/Clerical Duty</option>
+                            <option value="DUTY:REQUEST">Request Duty</option>
+                            <option value="DUTY:JANITORIAL">Janitorial Duty</option>
+                            <option value="DUTY:DAILY_CLEAN">Daily Cleaning</option>
                         </optgroup>
 
-                        <optgroup label="EVENTS & MEETINGS (Scan QR)">
-                            <option value="Daily Cleaning">Daily Cleaning</option>
-                            <option value="General Cleaning">General Cleaning</option>
-                            <option value="General Meeting">General Meeting</option>
-                            <option value="Special Meeting">Special Meeting</option>
+                        <optgroup label="EVENTS (QR Scan)">
+                            <option value="EVENT:GEN_MEETING">General Meeting</option>
+                            <option value="EVENT:GEN_CLEANING">General Cleaning</option>
+                            <option value="EVENT:SPECIAL">Special Meeting</option>
                         </optgroup>
                     </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-6 text-blue-600">
-                        <i class='bx bx-chevron-down text-4xl'></i>
-                    </div>
+                    <div class="absolute right-5 top-5 pointer-events-none text-gray-500"><i class='bx bx-chevron-down text-2xl'></i></div>
                 </div>
 
-                <div id="methodContainer" class="w-full max-w-md hidden opacity-0 transition-all duration-500 transform translate-y-4">
+                <div id="methodContainer" class="w-full flex justify-center mt-4">
                     
-                    <div id="methodPasscode" class="hidden flex-col items-center animate-fade-in-up">
-                        <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 w-full text-center">
-                            <div class="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-600">
-                                <i class='bx bx-key text-3xl'></i>
-                            </div>
-                            <h4 class="text-lg font-bold text-gray-800 mb-2">Passcode Required</h4>
-                            <p class="text-sm text-gray-500 mb-6">Enter the 6-digit code for this duty.</p>
-                            <button id="btnEnterCode" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-95 text-lg">
-                                Enter Passcode
-                            </button>
+                    <div id="viewQR" class="hidden flex-col items-center animate-fade-in-up w-full">
+                        <div class="bg-white p-6 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.15)] border-4 border-blue-600 mb-8 transform transition hover:scale-105 duration-300">
+                            <div id="qrcode"></div>
+                        </div>
+
+                        <h2 class="text-4xl font-black text-gray-800 mb-2 tracking-tight">SCAN TO ATTEND</h2>
+                        <p class="text-gray-400 font-bold text-xl" id="qrLabel">General Meeting</p>
+                        <div class="mt-6 flex items-center gap-2 text-sm text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
+                            <i class='bx bx-mobile-alt'></i> Use TechHRM Mobile App to Scan
                         </div>
                     </div>
 
-                    <div id="methodQR" class="hidden flex-col items-center animate-fade-in-up">
-                         <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 w-full text-center">
-                            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
-                                <i class='bx bx-qr-scan text-3xl'></i>
-                            </div>
-                            <h4 class="text-lg font-bold text-gray-800 mb-2">Scan QR Code</h4>
-                            <p class="text-sm text-gray-500 mb-6">Scan the event QR displayed on screen.</p>
-                            <button id="btnScan" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-95 text-lg flex items-center justify-center gap-2">
-                                <i class='bx bx-camera'></i> Open Scanner
-                            </button>
+                    <div id="viewPasscode" class="hidden flex-col items-center animate-fade-in-up text-center w-full max-w-md">
+                        
+                        <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-6">
+                            <i class='bx bxs-key text-5xl text-yellow-600'></i>
                         </div>
+                        
+                        <h2 class="text-3xl font-black text-gray-800 mb-2">ENTER PASSCODE</h2>
+                        <p class="text-gray-400 font-bold mb-8">Enter the 6-digit code provided by Supervisor</p>
+                        
+                        <div class="flex gap-2 justify-center mb-8 w-full">
+                            <input type="password" id="passcodeInput" class="w-full text-center text-5xl font-mono border-b-4 border-gray-300 py-2 focus:outline-none focus:border-blue-500 tracking-[0.5em] text-gray-700 bg-transparent transition-colors" placeholder="••••••" maxlength="6">
+                        </div>
+
+                        <button onclick="verifyPasscode()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-95 text-xl flex items-center justify-center gap-3">
+                            <i class='bx bx-check-circle text-2xl'></i> Verify & Log In
+                        </button>
+
+                        <p id="errorMsg" class="mt-4 text-red-500 font-bold text-sm hidden animate-pulse">
+                            <i class='bx bxs-error-circle'></i> Invalid Passcode. Try Again.
+                        </p>
                     </div>
 
                 </div>
@@ -164,157 +149,129 @@
         </div>
     </main>
 
-    <div id="codeModal" class="fixed inset-0 bg-blue-900/80 z-50 hidden flex items-center justify-center backdrop-blur-sm">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-            <div class="text-center mb-6">
-                <h3 class="text-2xl font-bold text-blue-900">Enter Duty Passcode</h3>
-            </div>
-            <form id="codeForm" class="space-y-4">
-                <input type="text" id="codeInput" class="w-full text-center text-3xl font-mono border-2 border-gray-300 rounded-xl py-4 focus:outline-none focus:border-yellow-400 uppercase tracking-widest" placeholder="123456" maxlength="6" required>
-                <div class="grid grid-cols-2 gap-4 mt-6">
-                    <button type="button" id="closeModal" class="px-4 py-3 bg-gray-100 rounded-xl font-bold hover:bg-gray-200 text-gray-700">Cancel</button>
-                    <button type="submit" class="px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg">Submit</button>
-                </div>
-            </form>
+    <div id="scanToast" class="fixed bottom-10 right-10 bg-gray-900 text-white px-6 py-5 rounded-2xl shadow-2xl flex items-center gap-5 transform translate-y-40 opacity-0 transition-all duration-500 z-50 min-w-[300px]">
+        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg border-2 border-green-400">
+            <i class='bx bx-check text-3xl'></i>
         </div>
-    </div>
-
-    <div id="scanModal" class="fixed inset-0 bg-black z-50 hidden flex flex-col items-center justify-center text-white">
-        <div class="relative w-72 h-72 border-4 border-white/50 rounded-2xl overflow-hidden mb-8 bg-gray-900 shadow-2xl">
-             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=400')] bg-cover opacity-30"></div>
-             <div class="scan-laser"></div>
-             <div class="absolute top-4 left-4 w-8 h-8 border-t-4 border-l-4 border-yellow-400"></div>
-             <div class="absolute top-4 right-4 w-8 h-8 border-t-4 border-r-4 border-yellow-400"></div>
-             <div class="absolute bottom-4 left-4 w-8 h-8 border-b-4 border-l-4 border-yellow-400"></div>
-             <div class="absolute bottom-4 right-4 w-8 h-8 border-b-4 border-r-4 border-yellow-400"></div>
-        </div>
-        <h3 class="text-2xl font-bold mb-2">Scanning Event QR...</h3>
-        <button id="cancelScan" class="px-8 py-3 border border-white/30 rounded-full hover:bg-white/10 transition-colors font-medium">Cancel</button>
-    </div>
-
-    <div id="successModal" class="fixed inset-0 bg-blue-900/80 z-50 hidden flex items-center justify-center backdrop-blur-sm">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
-            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner animate-bounce">
-                <i class='bx bx-check text-5xl text-green-600'></i>
-            </div>
-            <h3 class="text-2xl font-bold text-gray-800 mb-2">Success!</h3>
-            <p id="successMessage" class="text-gray-600 mb-8 text-lg">Action completed.</p>
-            <button id="closeSuccessModal" class="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 shadow-lg transition-transform active:scale-95">Continue</button>
+        <div>
+            <h4 class="font-bold text-lg text-green-400" id="toastTitle">Attendance Logged</h4>
+            <p class="text-sm text-gray-300 font-medium" id="toastStudentName">Student Name</p>
+            <p class="text-xs text-gray-500 mt-1" id="toastTime">Just now</p>
         </div>
     </div>
 
     <script>
-        const today = new Date();
-        document.getElementById('displayDate').innerText = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-        let currentState = 'logged_out'; 
-        let timeInDate = null;
-        let selectedMode = "";
-
-        // Elements
-        const activitySelect = document.getElementById('activityMode');
-        const methodContainer = document.getElementById('methodContainer');
-        const methodPasscode = document.getElementById('methodPasscode');
-        const methodQR = document.getElementById('methodQR');
-
-        const btnEnterCode = document.getElementById('btnEnterCode');
-        const btnScan = document.getElementById('btnScan');
-        const modal = document.getElementById('codeModal');
-        const scanModal = document.getElementById('scanModal');
-        const closeModal = document.getElementById('closeModal');
-        const cancelScan = document.getElementById('cancelScan');
-        const codeForm = document.getElementById('codeForm');
-        const successModal = document.getElementById('successModal');
-        const successMessage = document.getElementById('successMessage');
-        const closeSuccessModal = document.getElementById('closeSuccessModal');
-
-        // --- 1. SELECTION LOGIC ---
-        activitySelect.addEventListener('change', function() {
-            const value = this.value;
-            selectedMode = value;
-            
-            // Reset UI
-            methodContainer.classList.remove('hidden');
-            setTimeout(() => methodContainer.classList.remove('opacity-0', 'translate-y-4'), 50);
-            methodPasscode.classList.add('hidden');
-            methodQR.classList.add('hidden');
-
-            // Conditional Display
-            const passcodeDuties = ["Normal/Clerical Duty", "Request Duty", "Janitorial Duty", "Daily Cleaning"];
-            
-            if (passcodeDuties.includes(value)) {
-                // Show Passcode Button
-                methodPasscode.classList.remove('hidden');
-                methodPasscode.classList.add('flex');
-            } else {
-                // Show QR Button (For Events)
-                methodQR.classList.remove('hidden');
-                methodQR.classList.add('flex');
-            }
-        });
-
-        // --- 2. ACTION LOGIC ---
-        
-        closeSuccessModal.addEventListener('click', () => successModal.classList.add('hidden'));
-        closeModal.addEventListener('click', () => modal.classList.add('hidden'));
-        cancelScan.addEventListener('click', () => scanModal.classList.add('hidden'));
-
-        // Passcode Flow
-        btnEnterCode.addEventListener('click', () => {
-            if (currentState === 'completed') { alert("Done for today."); return; }
-            document.getElementById('codeInput').value = '';
-            modal.classList.remove('hidden');
-            document.getElementById('codeInput').focus();
-        });
-
-        codeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            modal.classList.add('hidden');
-            performAction("Manual Code");
-        });
-
-        // QR Flow
-        btnScan.addEventListener('click', () => {
-            if (currentState === 'completed') { alert("Done for today."); return; }
-            scanModal.classList.remove('hidden');
-            setTimeout(() => {
-                if (!scanModal.classList.contains('hidden')) {
-                    scanModal.classList.add('hidden');
-                    performAction("QR Scan");
-                }
-            }, 2000);
-        });
-
-        function performAction(method) {
+        // 1. CLOCK
+        function updateTime() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+            document.getElementById('dateDisplay').innerText = now.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
 
-            if (currentState === 'logged_out') {
-                currentState = 'logged_in';
-                timeInDate = now;
-                
-                document.getElementById('displayTimeIn').innerText = timeString;
-                document.getElementById('displayTimeIn').classList.add('text-green-600');
-                document.getElementById('displayStatus').innerText = "Active";
-                document.getElementById('displayStatus').className = "text-green-600 font-bold text-xl uppercase";
-                
-                // Lock selection
-                activitySelect.disabled = true;
-                activitySelect.classList.add('bg-gray-100');
+        // 2. DISPLAY LOGIC
+        let qrCodeObj = null;
 
-                successMessage.innerHTML = `Timed IN for <br><strong>${selectedMode}</strong><br>at ${timeString}`;
-                successModal.classList.remove('hidden');
+        function updateDisplay() {
+            const select = document.getElementById('eventSelect');
+            const value = select.value;
+            const text = select.options[select.selectedIndex].text;
+            
+            const viewQR = document.getElementById('viewQR');
+            const viewPasscode = document.getElementById('viewPasscode');
+
+            // Logic: QR for Events, Passcode for Duties
+            if (value.includes("EVENT")) {
+                // Show QR View
+                viewPasscode.classList.add('hidden');
+                viewPasscode.classList.remove('flex');
+                
+                viewQR.classList.remove('hidden');
+                viewQR.classList.add('flex');
+                
+                generateQR(text); // Generate Code
             } else {
-                currentState = 'completed';
-                document.getElementById('displayTimeOut').innerText = timeString;
-                document.getElementById('displayTimeOut').classList.add('text-blue-600');
-                
-                const diffHrs = ((now - timeInDate) / (1000 * 60 * 60)).toFixed(2);
-                document.getElementById('displayStatus').innerText = "Completed";
-                document.getElementById('displayStatus').className = "text-blue-600 font-bold text-xl uppercase";
+                // Show Passcode Input
+                viewQR.classList.add('hidden');
+                viewQR.classList.remove('flex');
 
-                successMessage.innerHTML = `Timed OUT from <br><strong>${selectedMode}</strong><br>Total: ${diffHrs} hrs`;
-                successModal.classList.remove('hidden');
+                viewPasscode.classList.remove('hidden');
+                viewPasscode.classList.add('flex');
+                
+                // Clear input
+                document.getElementById('passcodeInput').value = '';
+                document.getElementById('errorMsg').classList.add('hidden');
+            }
+        }
+
+        // 3. QR GENERATOR
+        function generateQR(text) {
+            document.getElementById('qrLabel').innerText = text;
+            const container = document.getElementById("qrcode");
+            const sessionID = "SESS-" + Math.floor(Date.now() / 1000);
+
+            container.innerHTML = ""; // Clear
+
+            qrCodeObj = new QRCode(container, {
+                text: JSON.stringify({ type: text, session: sessionID }),
+                width: 300,
+                height: 300,
+                colorDark : "#1e3a8a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+
+        // Initialize
+        // updateDisplay(); -- Don't init immediately so user sees "Select Duty Type" first, or allow first option
+
+        // 4. PASSCODE VERIFICATION LOGIC
+        function verifyPasscode() {
+            const input = document.getElementById('passcodeInput');
+            const error = document.getElementById('errorMsg');
+            
+            // Demo Code: 123456
+            if (input.value === "123456" || input.value.length === 6) { 
+                error.classList.add('hidden');
+                showToast("Yvan Dale Lastimoso", "Passcode Verified");
+                input.value = ""; 
+            } else {
+                error.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                setTimeout(() => input.classList.remove('border-red-500'), 500);
+            }
+        }
+
+        // 5. TOAST SIMULATION (Spacebar for QR, Manual for Passcode)
+        const toast = document.getElementById('scanToast');
+
+        function showToast(name, title = "Attendance Logged") {
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastStudentName').innerText = name;
+            document.getElementById('toastTime').innerText = new Date().toLocaleTimeString();
+
+            // Sound
+            try {
+                const audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3');
+                audio.volume = 0.5; 
+                audio.play();
+            } catch(e) {}
+
+            toast.classList.remove('translate-y-40', 'opacity-0');
+            toast.classList.add('toast-enter');
+
+            setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('translate-y-40', 'opacity-0');
+            }, 3000);
+        }
+
+        // Spacebar Listener (Only works when QR view is active)
+        document.body.onkeyup = function(e) {
+            const isQRMode = !document.getElementById('viewQR').classList.contains('hidden');
+            if (isQRMode && (e.key == " " || e.code == "Space" || e.keyCode == 32)) {
+                showToast("Miguel Basinillo (QR Scan)");
             }
         }
     </script>

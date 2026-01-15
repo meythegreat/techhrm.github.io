@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechHRM Admin - Assessment Record</title>
+    <title>TechHRM Admin - Assessment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -28,6 +28,29 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .sidebar-hover:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+        /* Editable Input Styles */
+        .editable-input {
+            width: 100%;
+            text-align: center;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            padding: 4px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        /* Active Edit Mode */
+        .editable-input:not(:disabled) {
+            background-color: white;
+            border-color: #d1d5db; /* gray-300 */
+            color: #1f2937; /* gray-800 */
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans-ui text-gray-800 h-screen flex overflow-hidden">
@@ -46,13 +69,11 @@
                 <i class='bx bxs-dashboard text-2xl mr-4 group-hover:text-yellow-400'></i>
                 <span class="text-md font-medium">Dashboard</span>
             </a>
-            
             <a href="admin-students.html" class="flex items-center p-3 rounded-xl sidebar-active transition-all shadow-md group">
                 <i class='bx bxs-group text-2xl mr-4'></i>
                 <span class="text-md">Students</span>
             </a>
-
-            <a href="#" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
+            <a href="admin-payroll.html" class="flex items-center p-3 rounded-xl text-blue-100 sidebar-hover transition-all group">
                 <i class='bx bxs-wallet text-2xl mr-4 group-hover:text-yellow-400'></i>
                 <span class="text-md font-medium">Payroll</span>
             </a>
@@ -67,83 +88,118 @@
 
     <main class="flex-1 overflow-y-auto relative z-10">
         
-        <div class="bg-[#526DFE] p-6 shadow-md flex items-center gap-4 text-white sticky top-0 z-30">
-            <button onclick="location.href='admin-students.html'" class="hover:bg-white/20 p-2 rounded-full transition-colors">
-                <i class='bx bxs-left-arrow-alt text-3xl'></i>
+        <div class="bg-[#526DFE] p-6 shadow-md flex items-center justify-between text-white sticky top-0 z-30">
+            <div class="flex items-center gap-4">
+                <button onclick="location.href='admin-students.html'" class="hover:bg-white/20 p-2 rounded-full transition-colors group">
+                    <i class='bx bxs-left-arrow-alt text-3xl group-hover:-translate-x-1 transition-transform'></i>
+                </button>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-wide">Yvan Dale Lastimoso</h1>
+                    <p class="text-blue-200 text-xs">Financial Assessment Record (Admin View)</p>
+                </div>
+            </div>
+
+            <button onclick="toggleEditMode()" id="editBtn" class="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors border border-white/20">
+                <i id="editIcon" class='bx bxs-edit text-xl'></i>
+                <span id="editLabel" class="font-bold">Edit Record</span>
             </button>
-            <h1 class="text-2xl font-bold tracking-wide">Yvan Dale Lastimoso</h1>
         </div>
 
         <div class="p-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                <div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-blue-600 flex justify-between items-center relative overflow-hidden">
-                    <div class="z-10">
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-blue-600 flex justify-between items-center">
+                    <div>
                         <h2 class="text-3xl font-black text-gray-800">₱25,000</h2>
-                        <p class="text-gray-500 font-bold uppercase tracking-wider text-sm mt-1">Tuition Fee Amount</p>
+                        <p class="text-gray-500 font-bold uppercase tracking-wider text-sm mt-1">Total Tuition Fee</p>
                     </div>
                     <div class="bg-blue-600 p-3 rounded-lg shadow-md">
-                        <span class="block w-6 h-6 bg-white rounded-sm opacity-50"></span>
+                        <i class='bx bxs-bank text-white text-2xl'></i>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-red-500 flex justify-between items-center relative overflow-hidden">
-                    <div class="z-10">
-                        <h2 class="text-3xl font-black text-gray-800">₱16,180</h2>
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-red-500 flex justify-between items-center">
+                    <div>
+                        <h2 id="totalRemainingDisplay" class="text-3xl font-black text-gray-800">₱16,180</h2>
                         <p class="text-gray-500 font-bold uppercase tracking-wider text-sm mt-1">Remaining Balance</p>
                     </div>
                     <div class="bg-red-500 p-3 rounded-lg shadow-md">
-                        <span class="block w-6 h-6 bg-white rounded-sm opacity-50"></span>
+                        <i class='bx bxs-wallet-alt text-white text-2xl'></i>
                     </div>
                 </div>
             </div>
 
             <div class="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden mb-8">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table class="w-full text-left" id="assessmentTable">
                         <thead class="bg-gray-50 border-b border-gray-200 text-gray-500 text-sm uppercase">
                             <tr>
-                                <th class="py-4 px-6 font-normal w-1/6">Total Hours Worked</th>
-                                <th class="py-4 px-6 font-normal w-1/6">Tuition Credit</th>
-                                <th class="py-4 px-6 font-normal w-1/6">Deductions</th>
-                                <th class="py-4 px-6 font-normal w-1/6">Net Tuition Balance</th>
-                                <th class="py-4 px-6 font-normal w-1/6">Remaining Balance</th>
+                                <th class="py-4 px-6 font-normal w-1/6">Month / Hours</th>
+                                <th class="py-4 px-6 font-normal w-1/6 text-center">Tuition Credit</th>
+                                <th class="py-4 px-6 font-normal w-1/6 text-center">Deductions</th>
+                                <th class="py-4 px-6 font-normal w-1/6 text-center">Net Balance</th>
+                                <th class="py-4 px-6 font-normal w-1/6 text-center">Remaining</th>
                                 <th class="py-4 px-6 font-normal w-1/6 text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 text-sm">
-                            <tr class="hover:bg-gray-50">
+                            
+                            <tr class="hover:bg-gray-50 calculation-row">
                                 <td class="py-4 px-6">
-                                    <p class="font-bold text-gray-700">81 HOURS</p>
-                                    <p class="text-xs text-gray-500">January 2026</p>
+                                    <div class="flex items-center gap-2">
+                                        <input type="number" class="editable-input hours-input text-gray-700 w-16" value="81" disabled oninput="calculateRow(this)"> 
+                                        <span class="text-xs font-bold text-gray-400">HRS</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1 pl-1">January 2026</p>
                                 </td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱2,268</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱ - 168</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱2,100</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱16,180</td>
+                                <td class="py-4 px-6 text-center">
+                                    <input type="number" class="editable-input credit-input text-gray-700" value="2268" disabled oninput="calculateRow(this)">
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <input type="number" class="editable-input deduction-input text-red-500" value="168" disabled oninput="calculateRow(this)">
+                                </td>
+                                <td class="py-4 px-6 text-center font-bold text-blue-700 net-display">₱2,100.00</td>
+                                <td class="py-4 px-6 text-center font-bold text-gray-800 remaining-display">₱16,180.00</td>
                                 <td class="py-4 px-6 text-center text-gray-400 font-bold">Pending</td>
                             </tr>
-                            <tr class="hover:bg-gray-50">
+
+                            <tr class="hover:bg-gray-50 calculation-row">
                                 <td class="py-4 px-6">
-                                    <p class="font-bold text-gray-700">60 HOURS</p>
-                                    <p class="text-xs text-gray-500">December 2025</p>
+                                    <div class="flex items-center gap-2">
+                                        <input type="number" class="editable-input hours-input text-gray-700 w-16" value="60" disabled oninput="calculateRow(this)"> 
+                                        <span class="text-xs font-bold text-gray-400">HRS</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1 pl-1">December 2025</p>
                                 </td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱1,680</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱ - 560</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱1,120</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱18,280</td>
+                                <td class="py-4 px-6 text-center">
+                                    <input type="number" class="editable-input credit-input text-gray-700" value="1680" disabled oninput="calculateRow(this)">
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <input type="number" class="editable-input deduction-input text-red-500" value="560" disabled oninput="calculateRow(this)">
+                                </td>
+                                <td class="py-4 px-6 text-center font-bold text-blue-700 net-display">₱1,120.00</td>
+                                <td class="py-4 px-6 text-center font-bold text-gray-800 remaining-display">₱18,280.00</td>
                                 <td class="py-4 px-6 text-center text-green-500 font-bold">Approved</td>
                             </tr>
-                            <tr class="hover:bg-gray-50">
+
+                            <tr class="hover:bg-gray-50 calculation-row">
                                 <td class="py-4 px-6">
-                                    <p class="font-bold text-gray-700">80 HOURS</p>
-                                    <p class="text-xs text-gray-500">November 2025</p>
+                                    <div class="flex items-center gap-2">
+                                        <input type="number" class="editable-input hours-input text-gray-700 w-16" value="80" disabled oninput="calculateRow(this)"> 
+                                        <span class="text-xs font-bold text-gray-400">HRS</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1 pl-1">November 2025</p>
                                 </td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱2,240</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱ - 224</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱2,016</td>
-                                <td class="py-4 px-6 font-bold text-gray-700">₱20,296</td>
+                                <td class="py-4 px-6 text-center">
+                                    <input type="number" class="editable-input credit-input text-gray-700" value="2240" disabled oninput="calculateRow(this)">
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <input type="number" class="editable-input deduction-input text-red-500" value="224" disabled oninput="calculateRow(this)">
+                                </td>
+                                <td class="py-4 px-6 text-center font-bold text-blue-700 net-display">₱2,016.00</td>
+                                <td class="py-4 px-6 text-center font-bold text-gray-800 remaining-display">₱20,296.00</td>
                                 <td class="py-4 px-6 text-center text-green-500 font-bold">Approved</td>
                             </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -151,30 +207,98 @@
 
             <div class="bg-white rounded-xl shadow-xl border border-gray-200 p-8 text-center max-w-4xl mx-auto">
                 <h3 class="text-xl font-bold text-black uppercase mb-6 tracking-wide">Assessment Breakdown</h3>
-                
-                <div class="grid grid-cols-2 gap-y-4 text-left max-w-lg mx-auto">
-                    <div class="text-gray-500 font-bold text-center border-b border-gray-100 pb-2">Account Title</div>
-                    <div class="text-gray-500 font-bold text-center border-b border-gray-100 pb-2">Amount</div>
-
-                    <div class="text-gray-500 font-bold text-right pr-8">Academic Institutional Fee</div>
-                    <div class="text-gray-500 font-bold text-center">₱322.47</div>
-
-                    <div class="text-gray-500 font-bold text-right pr-8">Library</div>
-                    <div class="text-gray-500 font-bold text-center">₱644.93</div>
-
-                    <div class="text-gray-500 font-bold text-right pr-8">Cultural</div>
-                    <div class="text-gray-500 font-bold text-center">₱234.52</div>
-
-                    <div class="text-gray-500 font-bold text-right pr-8">Tuition (18 units)</div>
-                    <div class="text-gray-500 font-bold text-center">₱7,821.00</div>
-
-                    <div class="text-gray-500 font-bold text-right pr-8">Academic Discount</div>
-                    <div class="text-gray-500 font-bold text-center">₱3,910.50</div>
+                <div class="grid grid-cols-2 gap-y-4 text-left max-w-lg mx-auto text-gray-600">
+                    <div class="font-bold text-right pr-8">Academic Institutional Fee</div><div class="text-center">₱322.47</div>
+                    <div class="font-bold text-right pr-8">Library</div><div class="text-center">₱644.93</div>
+                    <div class="font-bold text-right pr-8">Cultural</div><div class="text-center">₱234.52</div>
+                    <div class="font-bold text-right pr-8">Tuition (18 units)</div><div class="text-center">₱7,821.00</div>
+                    <div class="font-bold text-right pr-8">Academic Discount</div><div class="text-center">₱3,910.50</div>
                 </div>
             </div>
 
         </div>
     </main>
+
+    <script>
+        const HOURLY_RATE = 28.00;
+        const TOTAL_TUITION = 25000.00;
+        let isEditing = false;
+
+        function toggleEditMode() {
+            isEditing = !isEditing;
+            const btn = document.getElementById('editBtn');
+            const icon = document.getElementById('editIcon');
+            const label = document.getElementById('editLabel');
+            const inputs = document.querySelectorAll('.editable-input');
+
+            inputs.forEach(input => input.disabled = !isEditing);
+
+            if (isEditing) {
+                btn.className = "flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition-colors shadow-lg border border-green-400";
+                icon.className = "bx bxs-save text-xl";
+                label.innerText = "Save Changes";
+            } else {
+                btn.className = "flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors border border-white/20";
+                icon.className = "bx bxs-edit text-xl";
+                label.innerText = "Edit Record";
+                alert("Assessment Record Updated!");
+            }
+        }
+
+        function calculateRow(inputChanged) {
+            const row = inputChanged.closest('tr');
+            
+            // 1. Get Values
+            const hoursInput = row.querySelector('.hours-input');
+            const creditInput = row.querySelector('.credit-input');
+            const deductionInput = row.querySelector('.deduction-input');
+            
+            let hours = parseFloat(hoursInput.value) || 0;
+            
+            // 2. Auto-Calc Credit if Hours changed
+            if (inputChanged.classList.contains('hours-input')) {
+                const autoCredit = hours * HOURLY_RATE;
+                creditInput.value = autoCredit; // Updates value
+            }
+
+            // 3. Recalculate ALL balances (Running Balance Logic)
+            recalculateLedger();
+        }
+
+        function recalculateLedger() {
+            const rows = Array.from(document.querySelectorAll('.calculation-row'));
+            
+            // We calculate from OLDEST (bottom) to NEWEST (top)
+            // Reverse the array to iterate Bottom -> Top
+            const reversedRows = [...rows].reverse();
+            
+            let currentBalance = TOTAL_TUITION;
+
+            reversedRows.forEach(row => {
+                const creditVal = parseFloat(row.querySelector('.credit-input').value) || 0;
+                const deductionVal = parseFloat(row.querySelector('.deduction-input').value) || 0;
+                
+                // Net = Credit - Deductions
+                const net = creditVal - deductionVal;
+                
+                // Update Net Display
+                row.querySelector('.net-display').innerText = formatCurrency(net);
+                
+                // Update Running Balance
+                currentBalance -= net;
+                
+                // Update Remaining Display
+                row.querySelector('.remaining-display').innerText = formatCurrency(currentBalance);
+            });
+
+            // Update Top Card
+            document.getElementById('totalRemainingDisplay').innerText = formatCurrency(currentBalance);
+        }
+
+        function formatCurrency(amount) {
+            return '₱' + amount.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+    </script>
 
 </body>
 </html>
